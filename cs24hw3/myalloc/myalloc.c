@@ -95,6 +95,20 @@ unsigned char *myalloc(int size) {
                 " %d bytes allocated\n", size, (freeptr - mem));
         return (unsigned char *) 0;
     }
+
+    /// Use First Fit
+    // Go to first pointer to memory pool:
+    // If header > size, then set header = size + sizeof(header) + sizeof(footer)
+    //     return pointer to this header
+    // Else, increment pointer to next block and check again.
+    // If reach end of memory pool, return error
+
+    /// Block splitting
+    // If header >= 2 * size, then:
+    // Go to size + header: add footer (size of header + footer + size)
+    // Go to size + header + footer: new header for empty block
+    //    (orignal header - new header)
+    
 }
 
 
@@ -110,5 +124,18 @@ void myfree(unsigned char *oldptr) {
      *
      * Allocations will succeed for a little while...
      */
+
+     /// Simple free
+     // Go to header of oldptr and set to negative
+     // Go to footer and set to negative
+
+     /// Coalescing
+     // Go to header of block we just freed.
+     // if header - 1 (prev's tail) > 0, then it is free so:
+     //  set prev_free to footer value
+     // if header + size + footer + 1 (next's header) > 0, then it is free so:
+     //  set next_free to footer value 
+     // Set this block's header and footer = prev_free + next_free
+
 }
 
