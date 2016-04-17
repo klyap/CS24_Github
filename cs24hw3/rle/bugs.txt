@@ -1,0 +1,2 @@
+Since we only want to sum the lengths and those are stored in odd memory locations,
+the counter needs to increment by 2 instead of 1

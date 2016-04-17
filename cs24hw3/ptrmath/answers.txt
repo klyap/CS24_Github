@@ -1,0 +1,35 @@
+Answers for the "Arrays, Pointer Arithmetic, and Structs" section of CS24 HW3:
+
+1.
+char *p = malloc(16);
+bzero(p, 16); /* Sets all bytes to 0. */
+Since p is a char pointer, incrementing it will go forward 1 byte.
+Malloc'ed memory is now: 0000 0000 0000 0000
+
+*((int *) (p + 3)) = 0xDEADBEEF;
+Points to the int pointer: = p + 3 = 0x0 + 3*(size of char) = 0x3
+Assigns value at 0x3 to 0xDEADBEEF = 0b11011110101011011011111011101111
+p is now pointing at 0x3.
+Malloc'ed memory is now: 0001 1110 1110 1111
+
+*(((int *) p) + 3) = 0xCAFEBABE;
+Casts p as an int pointer, increments it by 3*(size of int) = 0x3 + 3*(4) = 0xc.
+Assigns value at 0xc to 0xCAFEBABE = 0b11001010111111101011101010111110
+Malloc'ed memory is now: 0001 1011 1101 0111
+
+2. 
+
+				Offset (bytes)	Size (bytes)
+int id				0		4 
+char code[5]			4		6
+struct entry* next		12		4
+
+Total size of struct: 16
+Unused bytes: 2 (from char code[5])
+
+3.
+offset = size of arr[4].code[3] 
+= 4 * (size of "entry" struct) + space of "id" + space of code[0] to code[3]
+= (4 * 16) + (4) + (4)
+= 72
+

@@ -1,0 +1,20 @@
+CS:APP2e	Practice	Problem	2.46,	pp.102-103
+
+A. What is the binary representation of 0.1 - x?
+x = 0.00011001100110011001100
+0.1 - x = 0.11101001100110011001100
+0.0000000000000000000000011001100110011001100...
+
+B. What is the approximate decimal value of 0.1 - x?
+x = 0.09999990463256835937 
+0.1 - x = 9.53674316 * 10^-8
+
+C. 
+100 hours = 100 * 60 min * 60 sec * 10 = 3600000 tenths of a sec
+
+3600000 tenths of a sec * 9.53674316 * 10^-8 = 0.343322754 seconds
+
+D.
+2000 m/s * 0.343322754 seconds = 666.645508 m
+
+

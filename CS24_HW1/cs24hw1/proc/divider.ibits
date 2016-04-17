@@ -1,0 +1,2 @@
+R = ALUOP_SUB R D
+BRZ R

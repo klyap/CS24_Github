@@ -1,0 +1,14 @@
+The results are different because C rounds sums as it goes along.
+If the new value that is added to the sum is much smaller, it will
+get rounded away. Summing in increasing order is more accurate because
+the main sum will be closer in range to the next number to be added 
+(at least initially), so the rounding won't be as drastic as 
+summing without sorting the addends. Summing in decreasing order will
+have the worst accuracy because the last numbers will be all rounded
+away as the main sum gets relatively large really quickly.
+However, if the data set is really big, then the main sum will become
+and stay relatively large compared to the next number to be added 
+regardless of how the addends are sorted, so
+the order that the numbers are added will matter less. 
+
+

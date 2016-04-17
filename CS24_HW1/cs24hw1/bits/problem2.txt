@@ -1,0 +1,10 @@
+It uses (n-1) as a bit mask to remove a "1" from n. This reduces n in such a way that the number of times this expression is called until n becomes 0 is equal to the number of 1's in n originally. 
+When you do "(n - 1)", one of 2 things happen:
+Case 1: n's last bit is 1.
+n - 1 then just turns the last bit into "0", so when you do n & (n - 1), the result is n - 1, which has exactly one fewer "1" than n.
+
+Case 2: n's last bit is 0. 
+This means we need to carry to do compute (n-1), which results in replacing the smallest bit of n with a "1" to a "0" and turning all the smaller bits (which must all be "0") into "1". Because we lose a "1" in n and all the smaller bits are flipped, when we do n & (n-1), the result also has one fewer "1" than n.
+
+Thus, if we count each time this expression is run in order for n to lose all its "1" bits (and becomes equivalent to 0), we will have the number of 1's in n since each time it's run, n loses a "1".
+
