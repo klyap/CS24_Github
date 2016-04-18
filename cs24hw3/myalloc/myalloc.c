@@ -24,7 +24,7 @@ int MEMORY_SIZE;
 unsigned char *mem;
 
 /* Made a struct for header */
-struct header(){
+struct header {
     int size;
 }
 
@@ -84,7 +84,7 @@ unsigned char *myalloc(int size) {
      *
      *        Your allocator will be more sophisticated!
      */
-    if (freeptr + size < mem + MEMORY_SIZE) {
+    /*if (freeptr + size < mem + MEMORY_SIZE) {
         unsigned char *resultptr = freeptr;
         freeptr += size;
         return resultptr;
@@ -94,19 +94,19 @@ unsigned char *myalloc(int size) {
                 " %d bytes allocated\n", size, (freeptr - mem));
         return (unsigned char *) 0;
     }
-
+*/
     /// Use First Fit
     // Go to first pointer to memory pool:
     // If header > size, then set header = size + sizeof(header) + sizeof(footer)
     //     return pointer to this header
     // Else, increment pointer to next block and check again.
     // If reach end of memory pool, return error
-    bool err = true;
+    bool err = 1;
     while (freeptr + size < mem + MEMORY_SIZE){
-        if (freeptr.size > size){
+        if (freeptr->size > size){
             // If it fits:
             freeptr->size = -1 * freeptr.size;
-            err = false;
+            err = 0;
             break;
         } else {
             // If it doesn't fit, go to next block by incrementing by
