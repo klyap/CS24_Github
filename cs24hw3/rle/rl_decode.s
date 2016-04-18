@@ -41,7 +41,7 @@ rl_decode:
         jge     find_space_done
 
 find_space_loop:
-        add     (%ecx, %esi), %bl         # Add in the count, then move
+        mov     (%ecx, %esi), %dl         # Add in the count, then move
         add     $2, %esi                  # forward 2 to the next count!
 
         cmp     12(%ebp), %esi
@@ -50,6 +50,7 @@ find_space_loop:
 find_space_done:
         # Write the length of the decoded output to the output-variable
         mov     16(%ebp), %edx    # edx = last pointer-argument to function
+        add     %dl, %ebx         # ADDING DL TO EBX
         mov     %ebx, (%edx)      # store computed size into this location
 
         # Allocate memory for the decoded data using malloc.
