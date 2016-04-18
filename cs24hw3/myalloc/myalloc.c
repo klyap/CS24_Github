@@ -24,8 +24,8 @@ int MEMORY_SIZE;
 unsigned char *mem;
 
 /* Made a struct for header */
-struct header {
-    int size;
+typedef struct header {
+    int size; // Size of payload; Negative if used, positive if free
 };
 
 /* TODO:  The unacceptable allocator uses an external "free-pointer" to track
@@ -35,7 +35,7 @@ struct header {
  *        You can declare data types, constants, and statically declared
  *        variables for managing your memory pool in this section too.
  */
-static struct header *freeptr;
+static header *freeptr;
 
 
 /*!
@@ -63,9 +63,9 @@ void init_myalloc() {
     }
 
     /* TODO:  You can initialize the initial state of your memory pool here. */
-    freeptr = (struct header *) mem; // Create pointer to space of size of header struct
-    struct header h; // Make a header struct.
-    h.size = MEMORY_SIZE - sizeof(struct header); // Initialize it.
+    //freeptr = (header *) mem; // Create pointer to space of size of header struct
+    header *h = (header *) mem; // Make a header struct.
+    h->size = MEMORY_SIZE - sizeof(struct header); // Initialize it.
     *freeptr = h; // Point freeptr to h
 
 }
@@ -103,7 +103,7 @@ unsigned char *myalloc(int size) {
     // If reach end of memory pool, return error
 
     int err = 1;
-    while (((int) freeptr) + size < ((int) mem) + MEMORY_SIZE){
+    while ((int) (freeptr + size) < (int) (mem + MEMORY_SIZE)){
         if (freeptr->size > size){
             // If it fits:
             freeptr->size = -1 * freeptr->size;
@@ -118,12 +118,12 @@ unsigned char *myalloc(int size) {
     
     if (err == 1){
         fprintf(stderr, "myalloc: cannot service request of size %d with"
-                " %d bytes allocated\n", size, (freeptr->size - mem));
+                " %d bytes allocated\n", size, 0);
         return (unsigned char *) 0;
     }
 
 
-    return freeptr;
+    return (char *) (freeptr + 1);
 
     /// Block splitting
     // If header >= 2 * size, then:
