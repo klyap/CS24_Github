@@ -1,2 +1,17 @@
-Since we only want to sum the lengths and those are stored in odd memory locations,
-the counter needs to increment by 2 instead of 1
+1. In find_space_loop: Increment %esi by 2.
+Since we want to sum the lengths and those are stored in odd memory locations,
+the counter needs to increment by 2 instead of 1.
+
+2. In write_loop: Increment %edi by 1
+To write to next memory location in output, need to increment %edi.
+
+3. In find_space_done: Need to store callee save registers before malloc
+Callee save registers are %eax, %ecx, %edx (Lecture 6).
+Don't need %edx later on in code, so don't need to store.
+%eax is only used to store output at the very end so there is no value here
+to store at this time either.
+Only need to push %ecx onto stack.
+
+4. In find_space_loop:
+
+

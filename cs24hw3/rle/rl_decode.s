@@ -42,19 +42,19 @@ rl_decode:
 
 find_space_loop:
         add     (%ecx, %esi), %bl         # Add in the count, then move
-        add     $2, %esi                  # forward to the next count!
+        add     $2, %esi                  # forward 2 to the next count!
 
         cmp     12(%ebp), %esi
         jl      find_space_loop
 
 find_space_done:
-
         # Write the length of the decoded output to the output-variable
         mov     16(%ebp), %edx    # edx = last pointer-argument to function
         mov     %ebx, (%edx)      # store computed size into this location
 
         # Allocate memory for the decoded data using malloc.
         # Pointer to allocated memory will be returned in %eax.
+        push    %ecx              # Callee save registers
         push    %ebx              # Number of bytes to allocate...
         call    malloc
         add     $4, %esp          # Clean up stack after call.
@@ -74,6 +74,7 @@ decode_loop:
 
 write_loop:
         mov     %bl, (%eax, %edi)
+        add     $1, %edi                  # Move to next memory location
         dec     %bh
         jnz     write_loop
 

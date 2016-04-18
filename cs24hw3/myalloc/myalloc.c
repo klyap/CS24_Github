@@ -23,6 +23,10 @@
 int MEMORY_SIZE;
 unsigned char *mem;
 
+/* Made a struct for header */
+struct header(){
+    int size;
+}
 
 /* TODO:  The unacceptable allocator uses an external "free-pointer" to track
  *        where free memory starts.  If your allocator doesn't use this
@@ -31,7 +35,7 @@ unsigned char *mem;
  *        You can declare data types, constants, and statically declared
  *        variables for managing your memory pool in this section too.
  */
-static unsigned char *freeptr;
+static struct header *freeptr;
 
 
 /*!
@@ -59,15 +63,10 @@ void init_myalloc() {
     }
 
     /* TODO:  You can initialize the initial state of your memory pool here. */
-    freeptr = mem;
-    // Using header/footer representation
-    // First 32-bit int is header
-    // Set to positive and value = MEMORY_SIZE since there are MEMORY_SIZE free
-    // bytes
-
-    // Payload is everything in between
-
-    // Last 32-bit int is footer (same as header)
+    freeptr = (struct header *) mem; // Create pointer to space of size of header struct
+    struct header h; // Make a header struct.
+    h.size = MEMORY_SIZE - sizeof(struct header); // Initialize it.
+    *freeptr = h; // Point freeptr to h
 
 }
 
@@ -102,6 +101,28 @@ unsigned char *myalloc(int size) {
     //     return pointer to this header
     // Else, increment pointer to next block and check again.
     // If reach end of memory pool, return error
+    bool err = true;
+    while (freeptr + size < mem + MEMORY_SIZE){
+        if (freeptr.size > size){
+            // If it fits:
+            freeptr->size = -1 * freeptr.size;
+            err = false;
+            break;
+        } else {
+            // If it doesn't fit, go to next block by incrementing by
+            // size of header and payload of current block
+            freeptr = (void *) freeptr + sizeof(struct header) + abs(freeptr->size);
+        }
+    }
+    
+    if (err){
+        fprintf(stderr, "myalloc: cannot service request of size %d with"
+                " %d bytes allocated\n", size, (freeptr - mem));
+        return (unsigned char *) 0;
+    }
+
+
+    return freeptr;
 
     /// Block splitting
     // If header >= 2 * size, then:
