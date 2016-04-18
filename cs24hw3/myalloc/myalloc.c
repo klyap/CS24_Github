@@ -101,7 +101,7 @@ unsigned char *myalloc(int size) {
     //     return pointer to this header
     // Else, increment pointer to next block and check again.
     // If reach end of memory pool, return error
-    return (unsigned char *) (freeptr + 1);
+
     int err = 1;
     while ((int) (freeptr + sizeof(freeptr) + size) < (int) (mem + MEMORY_SIZE)){
 
@@ -113,6 +113,7 @@ unsigned char *myalloc(int size) {
         } else {
             // If it doesn't fit, go to next block by incrementing by
             // size of header and payload of current block
+            err = 3;
             freeptr = (void *) freeptr + sizeof(struct header) + abs(freeptr->size);
         }
     }
