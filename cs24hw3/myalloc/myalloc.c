@@ -125,7 +125,7 @@ unsigned char *myalloc(int size) {
     err = 2;
     if (err == 1){
         fprintf(stderr, "myalloc: cannot service request of size %d with"
-                " %d bytes allocated\n", size, (int(freeptr) - int(mem));
+                " %d bytes allocated\n", size, ((int)freeptr - (int)mem);
         return (unsigned char *) 0;
     }
 
