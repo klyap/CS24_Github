@@ -103,7 +103,7 @@ unsigned char *myalloc(int size) {
     // If reach end of memory pool, return error
 
     int err = 1;
-    while (freeptr + size < mem + MEMORY_SIZE){
+    while (((int) freeptr) + size < ((int) mem) + MEMORY_SIZE){
         if (freeptr->size > size){
             // If it fits:
             freeptr->size = -1 * freeptr->size;
