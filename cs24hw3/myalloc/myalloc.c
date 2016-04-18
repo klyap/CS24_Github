@@ -119,11 +119,11 @@ unsigned char *myalloc(int size) {
         } else {
             // If it doesn't fit, go to next block by incrementing by
             // size of header and payload of current block
-            err = 3;
+            //err = 3;
             freeptr = (header *) ((void *) freeptr + sizeof(struct header) + abs(freeptr->size));
         }
     }
-    err = 2;
+    
     if (err == 1){
         fprintf(stderr, "myalloc: cannot service request of size %d with"
                 " %d bytes allocated\n", size, ((int)freeptr - (int)mem));
