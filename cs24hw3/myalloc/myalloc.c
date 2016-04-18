@@ -103,7 +103,8 @@ unsigned char *myalloc(int size) {
     // If reach end of memory pool, return error
 
     int err = 1;
-    while ((int) (freeptr + size) < (int) (mem + MEMORY_SIZE)){
+    while ((int) (freeptr + sizeof(freeptr) + size) < (int) (mem + MEMORY_SIZE)){
+
         if (freeptr->size > size){
             // If it fits:
             freeptr->size = -1 * freeptr->size;
@@ -115,7 +116,7 @@ unsigned char *myalloc(int size) {
             freeptr = (void *) freeptr + sizeof(struct header) + abs(freeptr->size);
         }
     }
-    
+    err = 2;
     if (err == 1){
         fprintf(stderr, "myalloc: cannot service request of size %d with"
                 " %d bytes allocated\n", size, 0);
