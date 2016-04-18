@@ -159,8 +159,8 @@ void myfree(unsigned char *oldptr) {
      // Go to header of oldptr and set to negative
      // Go to footer and set to negative
      oldptr -= sizeof(header);
-     oldptr = (header *) oldptr;
-     oldptr->size = oldptr->size * -1;
+     header *oldptr_h = (header *) oldptr;
+     oldptr_h->size = oldptr->size * -1;
 
      /// Coalescing
      // Go to header of block we just freed.
