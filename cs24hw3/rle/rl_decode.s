@@ -50,7 +50,6 @@ find_space_loop:
 find_space_done:
         # Write the length of the decoded output to the output-variable
         mov     16(%ebp), %edx    # edx = last pointer-argument to function
-        add     %dl, %ebx         # ADDING DL TO EBX
         mov     %ebx, (%edx)      # store computed size into this location
 
         # Allocate memory for the decoded data using malloc.
