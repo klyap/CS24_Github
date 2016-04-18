@@ -107,25 +107,30 @@ unsigned char *myalloc(int size) {
 
         if (freeptr->size > size){
             // If it fits:
-            freeptr->size = -1 * freeptr->size;
+            int old_block_size = freeptr->size;
+            freeptr->size = -1 * size;
+            header *ret = freeptr;
+            freeptr = (header *) ((char *) (freeptr + 1) + size); // at begining of next block
+            freeptr -> size = old_block_size - sizeof(freeptr) - size;
+
             err = 0;
             break;
         } else {
             // If it doesn't fit, go to next block by incrementing by
             // size of header and payload of current block
             err = 3;
-            freeptr = (void *) freeptr + sizeof(struct header) + abs(freeptr->size);
+            freeptr = (header *) ((void *) freeptr + sizeof(struct header) + abs(freeptr->size));
         }
     }
     err = 2;
     if (err == 1){
         fprintf(stderr, "myalloc: cannot service request of size %d with"
-                " %d bytes allocated\n", size, 0);
+                " %d bytes allocated\n", size, (int(freeptr) - int(mem));
         return (unsigned char *) 0;
     }
 
 
-    return (unsigned char *) (freeptr + 1);
+    return (unsigned char *) (ret + 1);
 
     /// Block splitting
     // If header >= 2 * size, then:
