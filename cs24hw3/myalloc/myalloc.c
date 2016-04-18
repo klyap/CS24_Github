@@ -103,13 +103,14 @@ unsigned char *myalloc(int size) {
     // If reach end of memory pool, return error
 
     int err = 1;
+    header *ret;
     while ((int) (freeptr + sizeof(freeptr) + size) < (int) (mem + MEMORY_SIZE)){
 
         if (freeptr->size > size){
             // If it fits:
             int old_block_size = freeptr->size;
             freeptr->size = -1 * size;
-            header *ret = freeptr;
+            ret = freeptr;
             freeptr = (header *) ((char *) (freeptr + 1) + size); // at begining of next block
             freeptr -> size = old_block_size - sizeof(freeptr) - size;
 
@@ -125,7 +126,7 @@ unsigned char *myalloc(int size) {
     err = 2;
     if (err == 1){
         fprintf(stderr, "myalloc: cannot service request of size %d with"
-                " %d bytes allocated\n", size, ((int)freeptr - (int)mem);
+                " %d bytes allocated\n", size, ((int)freeptr - (int)mem));
         return (unsigned char *) 0;
     }
 
