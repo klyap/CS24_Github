@@ -66,7 +66,7 @@ void init_myalloc() {
     //freeptr = (header *) mem; // Create pointer to space of size of header struct
     header *h = (header *) mem; // Make a header struct.
     h->size = MEMORY_SIZE - sizeof(struct header); // Initialize it.
-    *freeptr = h; // Point freeptr to h
+    freeptr = h; // Point freeptr to h
 
 }
 
@@ -123,7 +123,7 @@ unsigned char *myalloc(int size) {
     }
 
 
-    return (char *) (freeptr + 1);
+    return (unsigned char *) (freeptr + 1);
 
     /// Block splitting
     // If header >= 2 * size, then:
