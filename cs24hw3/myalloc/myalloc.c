@@ -26,7 +26,7 @@ unsigned char *mem;
 /* Made a struct for header */
 typedef struct header {
     int size; // Size of payload; Negative if used, positive if free
-};
+}header;
 
 /* TODO:  The unacceptable allocator uses an external "free-pointer" to track
  *        where free memory starts.  If your allocator doesn't use this
