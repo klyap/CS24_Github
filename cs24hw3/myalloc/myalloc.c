@@ -170,10 +170,10 @@ void myfree(unsigned char *oldptr) {
      //  set next_free to footer value 
      // Set this block's header and footer = prev_free + next_free
 
-     unsigned char *prevptr = mem;
+     header *prevptr = mem;
      header *prev = (header *)((char *)(prevptr + 1) + abs(prevptr->size));
      while (next != oldptr_h){
-        prevptr++;
+        prevptr = prev;
         prev = (header *)((char *)(prevptr + 1) + abs(prevptr->size));
      }
 
