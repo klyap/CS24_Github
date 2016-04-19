@@ -113,8 +113,8 @@ unsigned char *myalloc(int size) {
             int old_block_size = freeptr->size;
             freeptr->size = -1 * size;
             ret = freeptr;
-            freeptr = (header *) ((char *) (freeptr + 1) + size); // at begining of next block
-            freeptr -> size = old_block_size - sizeof(freeptr) - size;
+            /*freeptr = (header *) ((char *) (freeptr + 1) + size); // at begining of next block
+            freeptr -> size = old_block_size - sizeof(freeptr) - size;*/
 
             err = 0;
             break;
