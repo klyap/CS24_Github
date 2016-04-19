@@ -113,7 +113,7 @@ unsigned char *myalloc(int size) {
             fprintf(stderr, "alloc: pointer is too big: %d, %p \n", freeptr->size, freeptr);
         }
 
-        if (freeptr->size - (size + sizeof(header)) > 0){
+        if (freeptr->size > size + int(sizeof(header))){
             fprintf(stderr, "alloc: block found: %d, %d \n", freeptr->size, size + sizeof(header));
             // If it fits:
             int old_block_size = freeptr->size;
