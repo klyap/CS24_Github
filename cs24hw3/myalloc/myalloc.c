@@ -168,7 +168,7 @@ void myfree(unsigned char *oldptr) {
      oldptr -= sizeof(header);
      header *oldptr_h = (header *) oldptr;
      if (oldptr_h->size > 0){
-        fprintf(stderr, "myfree: pointer is too big: %d \n", oldptr_h->size);
+        fprintf(stderr, "myfree: pointer is too big: %d, %p \n", oldptr_h->size, oldptr_h);
      }
 
      oldptr_h->size = oldptr_h->size * -1;
