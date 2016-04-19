@@ -119,7 +119,7 @@ unsigned char *myalloc(int size) {
             freeptr->size = -1 * size;
             ret = freeptr;
             freeptr = (header *) ((unsigned char *) (freeptr + 1) + size); // at begining of next block
-            freeptr -> size = abs(old_block_size) - sizeof(freeptr) - size;
+            freeptr -> size = abs(old_block_size) - sizeof(header) - size;
 
             err = 0;
             break;
