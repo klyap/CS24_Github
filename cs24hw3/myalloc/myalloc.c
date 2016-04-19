@@ -95,8 +95,8 @@ unsigned char *myalloc(int size) {
         return (unsigned char *) 0;
     }*/
 
-    /// Use First Fit
-    // Go to first pointer to memory pool:
+    /// Use Next Fit
+    // Go to current pointer in memory pool pointing to next free space:
     // If header > size, then set header = size + sizeof(header) + sizeof(footer)
     //     return pointer to this header
     // Else, increment pointer to next block and check again.
@@ -169,6 +169,25 @@ void myfree(unsigned char *oldptr) {
      // if header + size + footer + 1 (next's header) > 0, then it is free so:
      //  set next_free to footer value 
      // Set this block's header and footer = prev_free + next_free
+
+     unsigned char *prevptr = mem;
+     header *prev = (header *)((char *)(prevptr + 1) + abs(prevptr->size));
+     while (next != oldptr){
+        prevptr++;
+        prev = (header *)((char *)(prevptr + 1) + abs(prevptr->size));
+     }
+
+     header *next = (header *)((char *)(oldptr + 1) + abs(oldptr->size));
+
+     
+     if (next->size > 0){
+        oldptr->size = oldptr->size + next->size;
+     }
+
+     if (prev->size > 0){
+        prev->size = oldptr-> size + prev->size;
+     }
+     
 
 
 
