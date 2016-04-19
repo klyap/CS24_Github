@@ -23,7 +23,7 @@
 int MEMORY_SIZE;
 unsigned char *mem;
 
-/* Made a struct for header */
+/* Made a struct for boundary tags. This stores the header. */
 typedef struct header {
     int size; // Size of payload; Negative if used, positive if free
 }header;
@@ -62,11 +62,11 @@ void init_myalloc() {
         abort();
     }
 
-    /* TODO:  You can initialize the initial state of your memory pool here. */
-    //freeptr = (header *) mem; // Create pointer to space of size of header struct
-    header *h = (header *) mem; // Make a header struct.
-    h->size = MEMORY_SIZE - sizeof(struct header); // Initialize it.
-    //freeptr = h; // Point freeptr to h
+    /* Initialize the initial state of your memory pool. */
+    // Make a header struct.
+    header *h = (header *) mem; 
+    // Initialize it to whole memory pool.
+    h->size = MEMORY_SIZE - sizeof(struct header);
 
 }
 
@@ -84,30 +84,26 @@ unsigned char *myalloc(int size) {
      *
      *        Your allocator will be more sophisticated!
      */
-    /*if (freeptr + size < mem + MEMORY_SIZE) {
-        unsigned char *resultptr = freeptr;
-        freeptr += size;
-        return resultptr;
-    }
-    else {
-        fprintf(stderr, "myalloc: cannot service request of size %d with"
-                " %d bytes allocated\n", size, (freeptr - mem));
-        return (unsigned char *) 0;
-    }*/
+    
+    /* Use First Fit
+     * Go to current pointer in memory pool pointing to next free space:
+     * If header > size, then set header = size + sizeof(header) + sizeof(footer)
+     *     return pointer to this header
+     * Else, increment pointer to next block and check again.
+     * If reach end of memory pool, return error
+     */
 
-    /// Use Next Fit
-    // Go to current pointer in memory pool pointing to next free space:
-    // If header > size, then set header = size + sizeof(header) + sizeof(footer)
-    //     return pointer to this header
-    // Else, increment pointer to next block and check again.
-    // If reach end of memory pool, return error
+    // Flag for whether allocation succeeded.
+    // 1 means there's an error. 0 means it's successful.
+    int err = 1; 
 
-    int err = 1;
     header *ret;
 
+    // Start at beginning of total memory pool
     freeptr = (header *) mem;
-    fprintf(stderr, "alloc: Looking for block size: %d \n", size);
-    while ( (freeptr + 1) + size/sizeof(header) < (header *) (mem + MEMORY_SIZE)){
+
+    // While the freeptr is still within the bounds of allocated memory pool
+    while ( (unsigned char *)(freeptr + 1) + size < (mem + MEMORY_SIZE)){
         fprintf(stderr, "alloc: size of block (freeptr): %d, %p \n", freeptr->size, freeptr);
         if (freeptr->size > MEMORY_SIZE){
             fprintf(stderr, "alloc: pointer is too big: %d, %p \n", freeptr->size, freeptr);
@@ -187,7 +183,7 @@ void myfree(unsigned char *oldptr) {
      header *prev = prevptr;
      while (prev != oldptr_h){
         prevptr = prev;
-        prev = (header *)((char *)(prevptr + 1) + abs(prevptr->size));
+        prev = (header *)((char *)(prevptr + 1) + abs(prevptr->size)); 
      }
 
      header *next = (header *)((char *)(oldptr_h + 1) + abs(oldptr_h->size));
