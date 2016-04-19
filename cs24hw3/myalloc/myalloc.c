@@ -162,6 +162,10 @@ void myfree(unsigned char *oldptr) {
      // Go to footer and set to negative
      oldptr -= sizeof(header);
      header *oldptr_h = (header *) oldptr;
+     if (oldptr_h->size > 0){
+        fprintf(stderr, "pointer is too big: %d", oldptr_h->size);
+     }
+     
      oldptr_h->size = oldptr_h->size * -1;
      /*
      /// Coalescing
