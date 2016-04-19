@@ -172,20 +172,20 @@ void myfree(unsigned char *oldptr) {
 
      unsigned char *prevptr = mem;
      header *prev = (header *)((char *)(prevptr + 1) + abs(prevptr->size));
-     while (next != oldptr){
+     while (next != oldptr_h){
         prevptr++;
         prev = (header *)((char *)(prevptr + 1) + abs(prevptr->size));
      }
 
-     header *next = (header *)((char *)(oldptr + 1) + abs(oldptr->size));
+     header *next = (header *)((char *)(oldptr_h + 1) + abs(oldptr_h->size));
 
      
      if (next->size > 0){
-        oldptr->size = oldptr->size + next->size;
+        oldptr_h->size = oldptr_h->size + next->size;
      }
 
      if (prev->size > 0){
-        prev->size = oldptr-> size + prev->size;
+        prev->size = oldptr_h-> size + prev->size;
      }
      
 
