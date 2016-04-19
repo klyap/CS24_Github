@@ -157,13 +157,13 @@ void myfree(unsigned char *oldptr) {
      * Allocations will succeed for a little while...
      */
 
-     /*/// Simple free
+     /// Simple free
      // Go to header of oldptr and set to negative
      // Go to footer and set to negative
      oldptr -= sizeof(header);
      header *oldptr_h = (header *) oldptr;
      oldptr_h->size = oldptr_h->size * -1;
-
+     /*
      /// Coalescing
      // Go to header of block we just freed.
      // if header - 1 (prev's tail) > 0, then it is free so:
