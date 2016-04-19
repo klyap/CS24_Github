@@ -84,7 +84,7 @@ unsigned char *myalloc(int size) {
      *
      *        Your allocator will be more sophisticated!
      */
-    if (freeptr + size < mem + MEMORY_SIZE) {
+    /*if (freeptr + size < mem + MEMORY_SIZE) {
         unsigned char *resultptr = freeptr;
         freeptr += size;
         return resultptr;
@@ -93,7 +93,7 @@ unsigned char *myalloc(int size) {
         fprintf(stderr, "myalloc: cannot service request of size %d with"
                 " %d bytes allocated\n", size, (freeptr - mem));
         return (unsigned char *) 0;
-    }
+    }*/
 
     /// Use Next Fit
     // Go to current pointer in memory pool pointing to next free space:
@@ -102,7 +102,7 @@ unsigned char *myalloc(int size) {
     // Else, increment pointer to next block and check again.
     // If reach end of memory pool, return error
 
-/*    int err = 1;
+/   int err = 1;
     header *ret;
 
     freeptr = (header *) mem;
@@ -137,7 +137,7 @@ unsigned char *myalloc(int size) {
     }
 
 
-    return (unsigned char *) (ret + 1);*/
+    return (unsigned char *) (ret + 1);
 
     /// Block splitting
     // If header >= 2 * size, then:
