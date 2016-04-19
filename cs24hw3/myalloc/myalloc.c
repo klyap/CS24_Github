@@ -110,7 +110,7 @@ unsigned char *myalloc(int size) {
 
         if (freeptr->size > size){
             // If it fits:
-            int old_block_size = freeptr->size;
+            //int old_block_size = freeptr->size;
             freeptr->size = -1 * size;
             ret = freeptr;
             /*freeptr = (header *) ((char *) (freeptr + 1) + size); // at begining of next block
