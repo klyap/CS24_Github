@@ -66,7 +66,7 @@ void init_myalloc() {
     //freeptr = (header *) mem; // Create pointer to space of size of header struct
     header *h = (header *) mem; // Make a header struct.
     h->size = MEMORY_SIZE - sizeof(struct header); // Initialize it.
-    freeptr = h; // Point freeptr to h
+    //freeptr = h; // Point freeptr to h
 
 }
 
@@ -164,13 +164,13 @@ void myfree(unsigned char *oldptr) {
      /// Simple free
      // Go to header of oldptr and set to negative
      // Go to footer and set to negative
-     oldptr -= sizeof(header);
+     /*oldptr -= sizeof(header);
      header *oldptr_h = (header *) oldptr;
      if (oldptr_h->size > 0){
         fprintf(stderr, "pointer is too big: %d", oldptr_h->size);
      }
 
-     oldptr_h->size = oldptr_h->size * -1;
+     oldptr_h->size = oldptr_h->size * -1;*/
      /*
      /// Coalescing
      // Go to header of block we just freed.
