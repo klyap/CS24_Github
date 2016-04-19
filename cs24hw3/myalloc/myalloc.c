@@ -104,6 +104,7 @@ unsigned char *myalloc(int size) {
 
     int err = 1;
     header *ret;
+    freeptr = mem;
     while ((unsigned char *) (freeptr + 1) + size < mem + MEMORY_SIZE){
 
         if (freeptr->size > size){
@@ -171,7 +172,7 @@ void myfree(unsigned char *oldptr) {
      // Set this block's header and footer = prev_free + next_free
 
      header *prevptr = (header *) mem;
-     header *prev = (header *)((char *)(prevptr + 1) + abs(prevptr->size));
+     header *prev = (header *)((char *)(prevptr) + sizeof(prevptr) + abs(prevptr->size));
      while (prev != oldptr_h){
         prevptr = prev;
         prev = (header *)((char *)(prevptr + 1) + abs(prevptr->size));
