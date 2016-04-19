@@ -113,13 +113,14 @@ unsigned char *myalloc(int size) {
             fprintf(stderr, "alloc: pointer is too big: %d, %p \n", freeptr->size, freeptr);
         }
 
-        if (-(freeptr->size) < -(size + sizeof(header))){
+        if (freeptr->size > size + sizeof(header)){
+            fprintf(stderr, "alloc: block found: %d, %d \n", freeptr->size, size + sizeof(header));
             // If it fits:
             int old_block_size = freeptr->size;
             freeptr->size = -1 * size;
             ret = freeptr;
             freeptr = (header *) ((unsigned char *) (freeptr + 1) + size); // at begining of next block
-            freeptr -> size = abs(old_block_size) - sizeof(header) - size;
+            freeptr->size = abs(old_block_size) - sizeof(header) - size;
 
             err = 0;
             break;
@@ -127,7 +128,7 @@ unsigned char *myalloc(int size) {
             // If it doesn't fit, go to next block by incrementing by
             // size of header and payload of current block
             //err = 3;
-            freeptr = (header *) ((unsigned char *) freeptr + sizeof(struct header) + abs(freeptr->size));
+            freeptr = (header *) ((unsigned char *) freeptr + sizeof(header) + abs(freeptr->size));
         }
     }
     
