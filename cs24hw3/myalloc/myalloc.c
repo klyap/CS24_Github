@@ -110,11 +110,11 @@ unsigned char *myalloc(int size) {
 
         if (freeptr->size > size){
             // If it fits:
-            //int old_block_size = freeptr->size;
+            int old_block_size = freeptr->size;
             freeptr->size = -1 * size;
             ret = freeptr;
-            /*freeptr = (header *) ((char *) (freeptr + 1) + size); // at begining of next block
-            freeptr -> size = old_block_size - sizeof(freeptr) - size;*/
+            freeptr = (header *) ((char *) (freeptr + 1) + size); // at begining of next block
+            freeptr -> size = abs(old_block_size) - sizeof(freeptr) - size;
 
             err = 0;
             break;
@@ -122,7 +122,7 @@ unsigned char *myalloc(int size) {
             // If it doesn't fit, go to next block by incrementing by
             // size of header and payload of current block
             //err = 3;
-            freeptr = (header *) ((void *) freeptr + sizeof(struct header) + abs(freeptr->size));
+            freeptr = (header *) ((char *) freeptr + sizeof(struct header) + abs(freeptr->size));
         }
     }
     
