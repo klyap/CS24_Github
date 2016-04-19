@@ -184,7 +184,7 @@ void myfree(unsigned char *oldptr) {
      // Set this block's header and footer = prev_free + next_free
 
      header *prevptr = (header *) mem;
-     header *prev = (header *)((char *)(prevptr) + sizeof(prevptr) + abs(prevptr->size));
+     header *prev = prevptr;
      while (prev != oldptr_h){
         prevptr = prev;
         prev = (header *)((char *)(prevptr + 1) + abs(prevptr->size));
@@ -195,10 +195,11 @@ void myfree(unsigned char *oldptr) {
      
      if (next->size > 0){
         oldptr_h->size = oldptr_h->size + next->size + sizeof(next);
+        fprintf(stderr, "myfree: coalesced next: %d, %p \n", oldptr_h->size, oldptr_h);
      }
 
-     if (prev->size > 0){
-        prev->size = oldptr_h-> size + prev->size + sizeof(prev);
+     if (prevptr->size > 0){
+        prevptr->size = oldptr_h-> size + prevptr->size + sizeof(prevptr);
      }
      
 
