@@ -181,11 +181,11 @@ void myfree(unsigned char *oldptr) {
 
      
      if (next->size > 0){
-        oldptr_h->size = oldptr_h->size + next->size;
+        oldptr_h->size = oldptr_h->size + next->size + sizeof(next);
      }
 
      if (prev->size > 0){
-        prev->size = oldptr_h-> size + prev->size;
+        prev->size = oldptr_h-> size + prev->size + sizeof(prev);
      }
      
 
