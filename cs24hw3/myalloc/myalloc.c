@@ -102,7 +102,7 @@ unsigned char *myalloc(int size) {
     // Else, increment pointer to next block and check again.
     // If reach end of memory pool, return error
 
-/   int err = 1;
+    int err = 1;
     header *ret;
 
     freeptr = (header *) mem;
