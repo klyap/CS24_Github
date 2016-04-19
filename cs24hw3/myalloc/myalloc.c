@@ -174,7 +174,7 @@ void myfree(unsigned char *oldptr) {
 
      oldptr_h->size = oldptr_h->size * -1;
      fprintf(stderr, "myfree: freed: %d, %p \n", oldptr_h->size, oldptr_h);
-     /*
+     
      /// Coalescing
      // Go to header of block we just freed.
      // if header - 1 (prev's tail) > 0, then it is free so:
@@ -201,7 +201,7 @@ void myfree(unsigned char *oldptr) {
         prev->size = oldptr_h-> size + prev->size + sizeof(prev);
      }
      
-*/
+
 
 
 
