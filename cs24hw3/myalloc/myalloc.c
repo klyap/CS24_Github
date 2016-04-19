@@ -108,7 +108,7 @@ unsigned char *myalloc(int size) {
     freeptr = (header *) mem;
     while ((unsigned char *) (freeptr + 1) + size < mem + MEMORY_SIZE){
         if (freeptr->size > MEMORY_SIZE){
-                fprintf(stderr, "alloc: pointer is too big: %d, %#08x \n", freeptr->size, freeptr);
+                fprintf(stderr, "alloc: pointer is too big: %d, %#08x", freeptr->size, &freeptr);
         }
 
         if (freeptr->size > size){
