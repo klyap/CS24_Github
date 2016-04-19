@@ -104,7 +104,7 @@ unsigned char *myalloc(int size) {
 
     int err = 1;
     header *ret;
-    while ((int) (freeptr + sizeof(freeptr) + size) < (int) (mem + MEMORY_SIZE)){
+    while ((char *) (freeptr + 1) + size < mem + MEMORY_SIZE){
 
         if (freeptr->size > size){
             // If it fits:
