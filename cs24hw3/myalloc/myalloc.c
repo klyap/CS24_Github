@@ -113,7 +113,7 @@ unsigned char *myalloc(int size) {
             int old_block_size = freeptr->size;
             freeptr->size = -1 * size;
             ret = freeptr;
-            freeptr = (header *) ((char *) (freeptr + 1) + size); // at begining of next block
+            freeptr = (header *) ((unsigned char *) (freeptr + 1) + size); // at begining of next block
             freeptr -> size = abs(old_block_size) - sizeof(freeptr) - size;
 
             err = 0;
@@ -122,7 +122,7 @@ unsigned char *myalloc(int size) {
             // If it doesn't fit, go to next block by incrementing by
             // size of header and payload of current block
             //err = 3;
-            freeptr = (header *) ((char *) freeptr + sizeof(struct header) + abs(freeptr->size));
+            freeptr = (header *) ((unsigned char *) freeptr + sizeof(struct header) + abs(freeptr->size));
         }
     }
     
@@ -165,7 +165,7 @@ void myfree(unsigned char *oldptr) {
      if (oldptr_h->size > 0){
         fprintf(stderr, "pointer is too big: %d", oldptr_h->size);
      }
-     
+
      oldptr_h->size = oldptr_h->size * -1;
      /*
      /// Coalescing
