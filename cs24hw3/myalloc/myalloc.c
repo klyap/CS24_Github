@@ -106,10 +106,11 @@ unsigned char *myalloc(int size) {
     header *ret;
 
     freeptr = (header *) mem;
-    //fprintf(stderr, "alloc: pointer is too big: %d, %p", freeptr->size, freeptr);
+    
     while ( (freeptr + 1) + size/sizeof(header) < (header *) (mem + MEMORY_SIZE)){
+        fprintf(stderr, "size of block (freeptr): %d, %p \n", freeptr->size, freeptr);
         if (freeptr->size > MEMORY_SIZE){
-            fprintf(stderr, "alloc: pointer is too big: %d, %p", freeptr->size, freeptr);
+            fprintf(stderr, "alloc: pointer is too big: %d, %p \n", freeptr->size, freeptr);
         }
 
         if (freeptr->size > size){
@@ -164,13 +165,13 @@ void myfree(unsigned char *oldptr) {
      /// Simple free
      // Go to header of oldptr and set to negative
      // Go to footer and set to negative
-     /*oldptr -= sizeof(header);
+     oldptr -= sizeof(header);
      header *oldptr_h = (header *) oldptr;
      if (oldptr_h->size > 0){
         fprintf(stderr, "pointer is too big: %d", oldptr_h->size);
      }
 
-     oldptr_h->size = oldptr_h->size * -1;*/
+     oldptr_h->size = oldptr_h->size * -1;
      /*
      /// Coalescing
      // Go to header of block we just freed.
