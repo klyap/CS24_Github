@@ -113,7 +113,7 @@ unsigned char *myalloc(int size) {
             fprintf(stderr, "alloc: pointer is too big: %d, %p \n", freeptr->size, freeptr);
         }
 
-        if (freeptr->size > size + sizeof(header)){
+        if (-(freeptr->size) < -(size + sizeof(header))){
             // If it fits:
             int old_block_size = freeptr->size;
             freeptr->size = -1 * size;
@@ -172,6 +172,7 @@ void myfree(unsigned char *oldptr) {
      }
 
      oldptr_h->size = oldptr_h->size * -1;
+     fprintf(stderr, "myfree: freed: %d, %p \n", oldptr_h->size, oldptr_h);
      /*
      /// Coalescing
      // Go to header of block we just freed.
