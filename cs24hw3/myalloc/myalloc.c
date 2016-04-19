@@ -157,7 +157,7 @@ void myfree(unsigned char *oldptr) {
      * Allocations will succeed for a little while...
      */
 
-     /// Simple free
+     /*/// Simple free
      // Go to header of oldptr and set to negative
      // Go to footer and set to negative
      oldptr -= sizeof(header);
@@ -190,7 +190,7 @@ void myfree(unsigned char *oldptr) {
         prev->size = oldptr_h-> size + prev->size + sizeof(prev);
      }
      
-
+*/
 
 
 
