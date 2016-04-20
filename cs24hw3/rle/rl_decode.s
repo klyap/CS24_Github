@@ -60,7 +60,7 @@ find_space_done:
         push    %ebx              # Number of bytes to allocate...
         call    malloc
         add     $4, %esp          # Clean up stack after call.
-
+        pop     %ecx              # Pop callee save registers
         # Now, decode the data from the input buffer into the output buffer.
         xor     %esi, %esi
         xor     %edi, %edi
