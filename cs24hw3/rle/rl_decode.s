@@ -41,8 +41,10 @@ rl_decode:
         jge     find_space_done
 
 find_space_loop:
-        mov     (%ecx, %esi), %dl         # Add in the count, then move
-        add     $2, %esi                  # forward 2 to the next count!
+        mov     $0, %edx                  # Clear %edx out for %dl
+        mov     (%ecx, %esi), %dl         # Move in the count, 
+        add     %edx, %ebx                # store sum
+        add     $2, %esi                  # then move forward 2 to the next count!
 
         cmp     12(%ebp), %esi
         jl      find_space_loop

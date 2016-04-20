@@ -1,0 +1,14 @@
+What happens if myfree() is called on:
+1. An address that did not originate from myalloc
+	
+2. Address that is contained within a memory block returned by myalloc
+	In both these cases, the statement referencing header->size will actually access some address and multiply the value there by -1. 
+
+3. Address that has already been freed
+	The block will be re-marked as being taken (ie. header->size > 0) since 
+	myfree() simply multiplies the header value by -1. 
+
+
+
+
+

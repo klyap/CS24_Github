@@ -91,6 +91,8 @@ unsigned char *myalloc(int size) {
      *     return pointer to this header
      * Else, increment pointer to next block and check again.
      * If reach end of memory pool, return error
+     * 
+     * This is inefficient in 
      */
 
     // Flag for whether allocation succeeded.
@@ -104,26 +106,26 @@ unsigned char *myalloc(int size) {
 
     // While the freeptr is still within the bounds of allocated memory pool
     while ( (unsigned char *)(freeptr + 1) + size < (mem + MEMORY_SIZE)){
-        fprintf(stderr, "alloc: size of block (freeptr): %d, %p \n", freeptr->size, freeptr);
-        if (freeptr->size > MEMORY_SIZE){
-            fprintf(stderr, "alloc: pointer is too big: %d, %p \n", freeptr->size, freeptr);
-        }
-
+        
+        // If the block pointed at by freeptr is big enough:
         if (freeptr->size > size + (int)sizeof(header)){
-            fprintf(stderr, "alloc: block found: %d, %d \n", freeptr->size, size + sizeof(header));
-            // If it fits:
+            // Adjust current block's header to reflect size allocated
             int old_block_size = freeptr->size;
             freeptr->size = -1 * size;
             ret = freeptr;
-            freeptr = (header *) ((unsigned char *) (freeptr + 1) + size); // at begining of next block
+
+            // Block splitting
+            // Move to leftover region of the old block and add header there
+            freeptr = (header *) ((unsigned char *) (freeptr + 1) + size);
+            // Adjust header value to reflect remaining free block size
             freeptr->size = abs(old_block_size) - sizeof(header) - size;
 
-            err = 0;
+            err = 0; // Succesfully allocated memory
             break;
+
         } else {
             // If it doesn't fit, go to next block by incrementing by
             // size of header and payload of current block
-            //err = 3;
             freeptr = (header *) ((unsigned char *) freeptr + sizeof(header) + abs(freeptr->size));
         }
     }
@@ -134,14 +136,8 @@ unsigned char *myalloc(int size) {
         return (unsigned char *) 0;
     }
 
-
+    // Return pointer to payload of allocated block
     return (unsigned char *) (ret + 1);
-
-    /// Block splitting
-    // If header >= 2 * size, then:
-    // Go to size + header: add footer (size of header + footer + size)
-    // Go to size + header + footer: new header for empty block
-    //    (orignal header - new header)
     
 }
 
@@ -151,52 +147,49 @@ unsigned char *myalloc(int size) {
  * myalloc().
  */
 void myfree(unsigned char *oldptr) {
-    /* TODO:
-     *
-     * The unacceptable allocator does nothing -- that's part of why this is
-     * unacceptable!
-     *
-     * Allocations will succeed for a little while...
+
+    /* Simple free
+     * Go to header of oldptr and set to negative (ie. free it)
+     */
+    oldptr -= sizeof(header);
+    header *oldptr_h = (header *) oldptr;
+    oldptr_h->size = oldptr_h->size * -1;
+
+    /* Coalescing
+     * Coalesce with free adjacent blocks.
+     * Find previous block by using a runner pointer starting at the beginning
+     * of our memory pool and moving along with another pointer.
      */
 
-     /// Simple free
-     // Go to header of oldptr and set to negative
-     // Go to footer and set to negative
-     oldptr -= sizeof(header);
-     header *oldptr_h = (header *) oldptr;
-     if (oldptr_h->size > 0){
-        fprintf(stderr, "myfree: pointer is too big: %d, %p \n", oldptr_h->size, oldptr_h);
-     }
+    /* Find next block */
+    header *next = (header *)((char *)(oldptr_h + 1) + abs(oldptr_h->size));
 
-     oldptr_h->size = oldptr_h->size * -1;
-     fprintf(stderr, "myfree: freed: %d, %p \n", oldptr_h->size, oldptr_h);
-     
-     /// Coalescing
-     // Go to header of block we just freed.
-     // if header - 1 (prev's tail) > 0, then it is free so:
-     //  set prev_free to footer value
-     // if header + size + footer + 1 (next's header) > 0, then it is free so:
-     //  set next_free to footer value 
-     // Set this block's header and footer = prev_free + next_free
+    /* Find previous block */
+    // prevptr stores address of block just before the freed block
+    header *prevptr = (header *) mem;
 
-     header *prevptr = (header *) mem;
-     header *prev = prevptr;
-     while (prev != oldptr_h){
+    // prev is the runner pointer that checks if the block next to prevptr
+    // is the freed block
+    header *prev = prevptr;
+
+    // While we haven't found the block before the freed block
+    while (prev != oldptr_h){
+        // Move both prevptr and prev ahead to next block
         prevptr = prev;
         prev = (header *)((char *)(prevptr + 1) + abs(prevptr->size)); 
-     }
+    }
 
-     header *next = (header *)((char *)(oldptr_h + 1) + abs(oldptr_h->size));
-
-     
-     if (next->size > 0 && next < (header *)(mem + MEMORY_SIZE)){
+    // Coalesce freed block with next block if its free 
+    // and the next block is still in our allocated memory pool
+    if (next->size > 0 && next < (header *)(mem + MEMORY_SIZE)){
         oldptr_h->size = oldptr_h->size + next->size + sizeof(header);
-        fprintf(stderr, "myfree: coalesced next: %d, %p \n", oldptr_h->size, oldptr_h);
-     }
+    }
 
-     if (prevptr->size > 0 && prevptr != (header *)mem){
+    // Coalesce freed block with prev block if its free
+    // and the prev block is still in our allocated memory pool
+    if (prevptr->size > 0 && prevptr != (header *)mem){
         prevptr->size = oldptr_h-> size + prevptr->size + sizeof(header);
-     }
+    }
      
 
 
