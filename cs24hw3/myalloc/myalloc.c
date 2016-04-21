@@ -61,9 +61,8 @@ void init_myalloc() {
     // Make a header struct.
     header *h = (header *) mem; 
     // Initialize it to whole memory pool.
-    h->size = MEMORY_SIZE - 2 * sizeof(header);
-    // Make footer
-    *(mem + sizeof(header) + MEMORY_SIZE) = h->size;
+    h->size = MEMORY_SIZE - sizeof(struct header);
+
 }
 
 
@@ -111,14 +110,14 @@ unsigned char *myalloc(int size) {
     
     // Start at beginning of total memory pool
     freeptr = (header *) mem; // Iterator pointer
-    header *bestfit = (header *) mem; // Free block that best fits so far
+    header bestfit = (header *) mem; // ree block that best fits so far
 
 
     // While the freeptr is still within the bounds of allocated memory pool
-    while ( (unsigned char *)(freeptr + 2) + size < (mem + MEMORY_SIZE)){
+    while ( (unsigned char *)(freeptr + 1) + size < (mem + MEMORY_SIZE)){
         
         // Find out how much free space there is
-        space = freeptr->size - (size + 2 * (int)sizeof(header));
+        space = freeptr->size - (size + (int)sizeof(header));
         
         // If the block pointed at by freeptr is big enough:
         if (space > 0 && space < min_space ){
@@ -128,33 +127,28 @@ unsigned char *myalloc(int size) {
         }
 
         // Increment to next block by incrementing by
-        // size of header and footer and payload of current block
+        // size of header and payload of current block
         freeptr = (header *) ((unsigned char *) freeptr + 
-            2 * sizeof(header) + abs(freeptr->size));
+            sizeof(header) + abs(freeptr->size));
     }
 
-    // If we haven't found a suitable block, return error
     if (err == 1){
         fprintf(stderr, "myalloc: cannot service request of size %d with"
                 " %d bytes allocated\n", size, ((int)freeptr - (int)mem));
         return (unsigned char *) 0;
     }
     
-    // Otherwise:
+    
     // Adjust current block's header to reflect size allocated
     int old_block_size = bestfit->size;
     bestfit->size = -1 * size;
-    // Adjust footer
-    *((char *)bestfit + bestfit->size + sizeof(header)) = bestfit->size;
     ret = bestfit;
 
     // Block splitting
     // Move to leftover region of the old block and add header there
-    bestfit = (header *) ((unsigned char *) (bestfit + 2) + size);
+    bestfit = (header *) ((unsigned char *) (bestfit + 1) + size);
     // Adjust header value to reflect remaining free block size
     bestfit->size = abs(old_block_size) - sizeof(header) - size;
-    // Add footer
-    *((char *)bestfit + bestfit->size + sizeof(header)) = bestfit->size;
 
 
     // Return pointer to payload of allocated block
@@ -175,13 +169,11 @@ unsigned char *myalloc(int size) {
 void myfree(unsigned char *oldptr) {
 
     /* Deallocation
-     * Go to header of oldptr and flip its sign to positive
-     * (ie. mark it as free)
+     * Go to header of oldptr and set to negative (ie. free it)
      */
     oldptr -= sizeof(header);
     header *oldptr_h = (header *) oldptr;
     oldptr_h->size = oldptr_h->size * -1;
-    *(oldptr + sizeof(header) + oldptr_h->size) = oldptr_h->size;
 
     /* Coalescing
      * Coalesce with free adjacent blocks.
@@ -191,11 +183,22 @@ void myfree(unsigned char *oldptr) {
      */
 
     /* Find next block */
-    header *next = (header *)((char *)(oldptr_h + 2) + abs(oldptr_h->size));
+    header *next = (header *)((char *)(oldptr_h + 1) + abs(oldptr_h->size));
 
     /* Find previous block */
     // prevptr stores address of block just before the freed block
-    header *prevptr = (header *)((char *)(oldptr_h - 2) - abs(oldptr_h->size));
+    header *prevptr = (header *) mem;
+
+    // prev is the runner pointer that checks if the block next to prevptr
+    // is the freed block
+    header *prev = prevptr;
+
+    // While we haven't found the block before the freed block
+    while (prev != oldptr_h){
+        // Move both prevptr and prev ahead to next block
+        prevptr = prev;
+        prev = (header *)((char *)(prevptr + 1) + abs(prevptr->size)); 
+    }
 
     // Coalesce freed block with next block if its free 
     // and the next block is still in our allocated memory pool
