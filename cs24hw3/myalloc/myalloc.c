@@ -150,7 +150,7 @@ unsigned char *myalloc(int size) {
 
     // Block splitting
     // Move to leftover region of the old block and add header there
-    bestfit = (header *) ((unsigned char *) (bestfit + 1) + size);
+    bestfit = (header *) ((unsigned char *) (bestfit + 2) + size);
     // Adjust header value to reflect remaining free block size
     bestfit->size = abs(old_block_size) - sizeof(header) - size;
     // Add footer
