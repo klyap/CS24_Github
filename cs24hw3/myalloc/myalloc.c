@@ -63,7 +63,7 @@ void init_myalloc() {
     // Initialize it to whole memory pool.
     h->size = MEMORY_SIZE - 2 * sizeof(header);
     // Make footer
-    mem + sizeof(header) + MEMORY_SIZE = h->size;
+    *(mem + sizeof(header) + MEMORY_SIZE) = h->size;
 }
 
 
@@ -194,7 +194,7 @@ void myfree(unsigned char *oldptr) {
 
     /* Find previous block */
     // prevptr stores address of block just before the freed block
-    header *prevptr = (header *)((char *)(oldptr_h - 2) - abs(oldptr_h->size))
+    header *prevptr = (header *)((char *)(oldptr_h - 2) - abs(oldptr_h->size));
 
     // Coalesce freed block with next block if its free 
     // and the next block is still in our allocated memory pool
