@@ -19,7 +19,7 @@ Malloc'ed memory is now: 00 00 00 EF BE AD DE 00 00 00 00 00 BE BA FE CA
 2. 
 
 				Offset (bytes)	Size (bytes)
-int id				0		4 
+int id					0		4 
 char code[5]			4		5
 struct entry* next		12		4
 
