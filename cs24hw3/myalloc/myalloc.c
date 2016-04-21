@@ -144,7 +144,8 @@ unsigned char *myalloc(int size) {
     // Adjust current block's header to reflect size allocated
     int old_block_size = bestfit->size;
     bestfit->size = -1 * size;
-    (char *)bestfit + bestfit->size + sizeof(header) = bestfit->size;
+    // Adjust footer
+    *((char *)bestfit + bestfit->size + sizeof(header)) = bestfit->size;
     ret = bestfit;
 
     // Block splitting
