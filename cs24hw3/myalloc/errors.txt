@@ -1,11 +1,44 @@
 What happens if myfree() is called on:
-1. An address that did not originate from myalloc
+1. Address that did not originate from myalloc
 2. Address that is contained within a memory block returned by myalloc
 	In both these cases, the statement referencing header->size will actually access some address and multiply the value there by -1. 
 
 3. Address that has already been freed
 	The block will be re-marked as being taken (ie. header->size > 0) since 
 	myfree() simply multiplies the header value by -1. 
+
+How to implement an allocator that would be more robust and checks for:
+
+1. An address that has already been freed
+	Before attempting any freeing, check if the header value is positive.
+	If it is, simply print "Already been freed" followed by the input address
+	that was passed in and return.
+ 
+2. Address that did not originate from myalloc
+	Store list of free addresses in a linked list 
+	(ie use an explicit free list).
+
+	In myfree(), before doing any freeing,
+	check the input (the address of the block to be freed)
+	against this list. Compare the input's address (minus header size) to each
+	address in the free list. 
+	If it's not in the list, it should simply print an error statement 
+	"Did not originate from myalloc" followed by the input address
+	that was passed in and return.
+
+3. Address is contained within a memory block returned by myalloc
+	For every block in the list of free addresses, b, check if the input
+	address is within that block. Do this by comparing it to the
+	address of the header of b + 1 byte, and then 
+	b + 1 byte + sizeof(header) + abs(b->size).
+	If it falls between these 2 values, print an error statement 
+	"Within memory block returned by myalloc" followed by the input address
+	that was passed in, and return.
+
+
+
+
+
 
 
 

@@ -36,7 +36,6 @@ typedef struct header {
  *        variables for managing your memory pool in this section too.
  */
 static header *freeptr;
-header *bestfit;
 
 
 /*!
@@ -93,7 +92,7 @@ unsigned char *myalloc(int size) {
      * Else, increment pointer to next block and check again.
      * If reach end of memory pool, return error
      * 
-     * This is inefficient in cases where 
+     * This is inefficient in 
      */
 
     // Flag for whether allocation succeeded.
@@ -109,9 +108,20 @@ unsigned char *myalloc(int size) {
     while ( (unsigned char *)(freeptr + 1) + size < (mem + MEMORY_SIZE)){
         
         // If the block pointed at by freeptr is big enough:
-        int space = freeptr->size - (size + (int)sizeof(header));
-        if (space > 0 && space < min_space ){
-            bestfit = freeptr;
+        if (freeptr->size > size + (int)sizeof(header)){
+            // Adjust current block's header to reflect size allocated
+            int old_block_size = freeptr->size;
+            freeptr->size = -1 * size;
+            ret = freeptr;
+
+            // Block splitting
+            // Move to leftover region of the old block and add header there
+            freeptr = (header *) ((unsigned char *) (freeptr + 1) + size);
+            // Adjust header value to reflect remaining free block size
+            freeptr->size = abs(old_block_size) - sizeof(header) - size;
+
+            err = 0; // Succesfully allocated memory
+            break;
 
         } else {
             // If it doesn't fit, go to next block by incrementing by
@@ -119,19 +129,6 @@ unsigned char *myalloc(int size) {
             freeptr = (header *) ((unsigned char *) freeptr + sizeof(header) + abs(freeptr->size));
         }
     }
-
-    // Adjust current block's header to reflect size allocated
-    int old_block_size = bestfit->size;
-    bestfit->size = -1 * size;
-    ret = bestfit;
-
-    // Block splitting
-    // Move to leftover region of the old block and add header there
-    bestfit = (header *) ((unsigned char *) (bestfit + 1) + size);
-    // Adjust header value to reflect remaining free block size
-    bestfit->size = abs(old_block_size) - sizeof(header) - size;
-
-    err = 0; // Succesfully allocated memory
     
     if (err == 1){
         fprintf(stderr, "myalloc: cannot service request of size %d with"
