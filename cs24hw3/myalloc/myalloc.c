@@ -37,6 +37,7 @@ typedef struct header {
  */
 static header *freeptr;
 header *bestfit;
+int min_space;
 
 
 /*!
@@ -101,6 +102,7 @@ unsigned char *myalloc(int size) {
     int err = 1; 
 
     header *ret;
+    min_space = MEMORY_SIZE;
 
     // Start at beginning of total memory pool
     freeptr = (header *) mem;
