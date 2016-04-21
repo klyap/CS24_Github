@@ -103,7 +103,7 @@ unsigned char *myalloc(int size) {
 
     header *ret;
     min_space = MEMORY_SIZE;
-
+    bestfit = (header *) mem;
     // Start at beginning of total memory pool
     freeptr = (header *) mem;
     int space;
@@ -116,16 +116,16 @@ unsigned char *myalloc(int size) {
         if (space > 0 && space < min_space ){
             bestfit = freeptr;
             min_space = space;
-            fprintf(stderr,"myalloc: found %p %d\n", bestfit, space);
+            fprintf(stderr,"myalloc: found %p %d\n", bestfit, min_space);
 
-        } 
+        }
         // If it doesn't fit, go to next block by incrementing by
         // size of header and payload of current block
         freeptr = (header *) ((unsigned char *) freeptr + sizeof(header) + abs(freeptr->size));
         fprintf(stderr,"myalloc: moving to %p with %d \n", freeptr, freeptr->size); 
     }
     
-    fprintf(stderr,"myalloc: is %p %d\n", bestfit, space);
+    fprintf(stderr,"myalloc: is %p %d\n", bestfit, min_space);
     // Adjust current block's header to reflect size allocated
     int old_block_size = bestfit->size;
     bestfit->size = -1 * size;
