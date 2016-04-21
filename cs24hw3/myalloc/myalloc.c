@@ -115,11 +115,11 @@ unsigned char *myalloc(int size) {
         if (space > 0 && space < min_space ){
             bestfit = freeptr;
 
-        } else {
+        } 
             // If it doesn't fit, go to next block by incrementing by
             // size of header and payload of current block
             freeptr = (header *) ((unsigned char *) freeptr + sizeof(header) + abs(freeptr->size));
-        }
+        
     }
 
     // Adjust current block's header to reflect size allocated
