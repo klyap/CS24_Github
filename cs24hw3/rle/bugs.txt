@@ -5,13 +5,22 @@
 2. In write_loop: Increment %edi by 1
 	To write to next memory location in output, need to increment %edi.
 
-3. In find_space_done: Need to store callee save registers before malloc
+3. In find_space_done: Need to do callee save registers
+	We need to deal with callee save registers when calling malloc.
+	First we need to push them before the call and then pop when we return.
 	Callee save registers are %eax, %ecx, %edx (Lecture 6).
 	Don't need %edx later on in code, so don't need to store.
 	%eax is only used to store output at the very end so there is no value here
 	to store at this time either.
 	Only need to push %ecx onto stack.
 
-4. In find_space_loop: %bl overflows when the stored sum gets large (value stored in %ebx will intefere with that in %bl)
-	Instead, clear out the register %edx, which contains a similar register to %bl, called %dl, in the last 8 bits of %edx. Store each value in %dl as we were doing with %bl. %edx is now filled with 0's for the first 28 bits and then has the value of %dl in the last 8 bits. We can then add %edx into %ebx, where the final sum is stored. We can't directly add %dl into %ebx since they are of different sizes.
+4. In find_space_loop: %bl overflows when the stored sum gets large 
+   (value stored in %ebx will intefere with that in %bl)
+	Instead, clear out the register %edx, which contains a similar 
+	register to %bl, called %dl, in the last 8 bits of %edx.
+	Store each value in %dl as we were doing with %bl. %edx is now filled
+	with 0's for the first 28 bits and then has the value of %dl in the
+	last 8 bits. We can then add %edx into %ebx, where the 
+	final sum is stored. We can't directly add %dl into %ebx
+	since they are of different sizes.
 
