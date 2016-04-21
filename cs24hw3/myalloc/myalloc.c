@@ -114,15 +114,15 @@ unsigned char *myalloc(int size) {
         int space = freeptr->size - (size + (int)sizeof(header));
         if (space > 0 && space < min_space ){
             bestfit = freeptr;
-            fprintf("myalloc: found %p %d\n", bestfit, space);
+            fprintf(stderr,"myalloc: found %p %d\n", bestfit, space);
 
         } 
         // If it doesn't fit, go to next block by incrementing by
         // size of header and payload of current block
         freeptr = (header *) ((unsigned char *) freeptr + sizeof(header) + abs(freeptr->size));
-        fprintf("myalloc: moving from %p \n", freeptrxsx); 
+        fprintf(stderr,"myalloc: moving from %p \n", freeptr); 
     }
-    fprintf("myalloc: is %p %d\n", bestfit, space);
+    fprintf(stderr,"myalloc: is %p %d\n", bestfit, space);
     // Adjust current block's header to reflect size allocated
     int old_block_size = bestfit->size;
     bestfit->size = -1 * size;
