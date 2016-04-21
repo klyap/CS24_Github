@@ -110,7 +110,7 @@ unsigned char *myalloc(int size) {
     
     // Start at beginning of total memory pool
     freeptr = (header *) mem; // Iterator pointer
-    header bestfit = (header *) mem; // ree block that best fits so far
+    header* bestfit = (header *) mem; // ree block that best fits so far
 
 
     // While the freeptr is still within the bounds of allocated memory pool
