@@ -122,7 +122,7 @@ unsigned char *myalloc(int size) {
         // If it doesn't fit, go to next block by incrementing by
         // size of header and payload of current block
         freeptr = (header *) ((unsigned char *) freeptr + sizeof(header) + abs(freeptr->size));
-        fprintf(stderr,"myalloc: moving from %p \n", freeptr); 
+        fprintf(stderr,"myalloc: moving to %p with %d \n", freeptr, freeptr->size); 
     }
     
     fprintf(stderr,"myalloc: is %p %d\n", bestfit, space);
