@@ -29,8 +29,8 @@ How to implement an allocator that would be more robust and checks for:
 3. Address is contained within a memory block returned by myalloc
 	For every block in the list of free addresses, b, check if the input
 	address is within that block. Do this by comparing it to the
-	address of the header of b + 1 byte, and then 
-	b + 1 byte + sizeof(header) + abs(b->size).
+	address of the (header of b) + 1 byte, and then 
+	(header of b) + 1 byte + sizeof(header) + abs(b->size).
 	If it falls between these 2 values, print an error statement 
 	"Within memory block returned by myalloc" followed by the input address
 	that was passed in, and return.

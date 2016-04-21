@@ -116,6 +116,7 @@ unsigned char *myalloc(int size) {
         if (space > 0 && space < min_space ){
             bestfit = freeptr;
             min_space = space;
+            err = 0; // Succesfully allocated memory
             fprintf(stderr,"myalloc: found %p %d\n", bestfit, min_space);
 
         }
@@ -123,6 +124,12 @@ unsigned char *myalloc(int size) {
         // size of header and payload of current block
         freeptr = (header *) ((unsigned char *) freeptr + sizeof(header) + abs(freeptr->size));
         fprintf(stderr,"myalloc: moving to %p with %d \n", freeptr, freeptr->size); 
+    }
+
+    if (err == 1){
+        fprintf(stderr, "myalloc: cannot service request of size %d with"
+                " %d bytes allocated\n", size, ((int)freeptr - (int)mem));
+        return (unsigned char *) 0;
     }
     
     fprintf(stderr,"myalloc: is %p %d\n", bestfit, min_space);
@@ -137,13 +144,9 @@ unsigned char *myalloc(int size) {
     // Adjust header value to reflect remaining free block size
     bestfit->size = abs(old_block_size) - sizeof(header) - size;
 
-    err = 0; // Succesfully allocated memory
     
-    if (err == 1){
-        fprintf(stderr, "myalloc: cannot service request of size %d with"
-                " %d bytes allocated\n", size, ((int)freeptr - (int)mem));
-        return (unsigned char *) 0;
-    }
+    
+    
 
     // Return pointer to payload of allocated block
     return (unsigned char *) (ret + 1);
