@@ -107,6 +107,7 @@ unsigned char *myalloc(int size) {
     // Start at beginning of total memory pool
     freeptr = (header *) mem;
     int space;
+    fprintf(stderr,"------------- %d", size);
     // While the freeptr is still within the bounds of allocated memory pool
     while ( (unsigned char *)(freeptr + 1) + size < (mem + MEMORY_SIZE)){
         
