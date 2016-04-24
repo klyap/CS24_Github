@@ -40,12 +40,7 @@ void static_init() {
 /*! Static initialization for the Shape class. */
 void Shape_class_init(Shape_Class *class) {
     /* TODO */
-    // initialize static member...???
-    class->getDensity = Shape_setDensity;
-    class->getMass = Shape_getMass;
     class->getVolume = NULL;
-    Shape_init(class, class->density);
-
 }
 
 
@@ -55,8 +50,8 @@ void Shape_class_init(Shape_Class *class) {
  */
 void Shape_init(Shape_Data *this, Shape_Class *class, float D) {
     /* TODO */
-    this.density = D;
-
+    this->class = class;
+    Shape_setDensity(this, D);
 }
 
 
@@ -71,7 +66,7 @@ void Shape_setDensity(Shape_Data *this, float D) {
 /*! Returns the mass of this shape, computed from the density and volume. */
 float Shape_getMass(Shape_Data *this) {
     /* TODO */
-    return this->getVolume * this->getDensity;
+    return this->class->getVolume(this) * this->density;
 }
 
 
@@ -94,10 +89,8 @@ float Shape_getMass(Shape_Data *this) {
 
 /*! Static initialization for the Box class. */
 void Box_class_init(Box_Class *class) {
-    /* TODO */ 
-    // Static member?  
+    /* TODO */
     class->getVolume = Box_getVolume;
-    Box_init(class, 0, 0, 0, 0); // Pass in static member too??
 }
 
 
@@ -109,11 +102,8 @@ void Box_class_init(Box_Class *class) {
 void Box_init(Box_Data *this, Box_Class *class,
     float L, float W, float H, float D) {
     /* TODO */
-    this->class = class;
-    this->length = L;
-    this->width = W;
-    this->height = H;
-    this->density = D;
+    Shape_init((Shape_Data *) this, (Shape_Class *) class, D);
+    Box_setSize(this, L, W, H);
 }
 
 
@@ -123,8 +113,9 @@ void Box_init(Box_Data *this, Box_Class *class,
  */
 Box_Data * new_Box(float L, float W, float H, float D) {
     /* TODO */
-    //malloc(sizeof(float));
-    return NULL;
+    Box_Data *new_box = (Box_Data *) malloc(sizeof(Box_Data));
+    Box_init(new_box, &Box, L, W, H, D);
+    return new_box;
 }
 
 
@@ -160,7 +151,7 @@ float Box_getVolume(Box_Data *this) {
 /*! Static initialization for the Sphere class. */
 void Sphere_class_init(Sphere_Class *class) {
     /* TODO */
-    this->getVolume = Sphere_getVolume;
+    class->getVolume = Sphere_getVolume;
 }
 
 
@@ -171,9 +162,9 @@ void Sphere_class_init(Sphere_Class *class) {
  */
 void Sphere_init(Sphere_Data *this, Sphere_Class *class, float R, float D) {
     /* TODO */
-    this->class = class;
-    this->radius = R;
-    this->density = D;
+    Shape_init((Shape_Data *)this,(Shape_Class *) class, D);
+    Sphere_setRadius(this, R);
+    
 }
 
 
@@ -183,14 +174,16 @@ void Sphere_init(Sphere_Data *this, Sphere_Class *class, float R, float D) {
  */
 Sphere_Data * new_Sphere(float R, float D) {
     /* TODO */
-    return NULL;
+    Sphere_Data *new_sphere = (Sphere_Data *) malloc(sizeof(Sphere_Data));
+    Sphere_init(new_sphere, &Sphere, R, D);
+    return new_sphere;
 }
 
 
 /*! Sets the radius of the sphere.  The argument is asserted to be positive. */
 void Sphere_setRadius(Sphere_Data *this, float R) {
     /* TODO */
-    assert(L >= R);
+    assert(R >= 0);
     this->radius = R;
 }
 
@@ -213,8 +206,7 @@ float Sphere_getVolume(Sphere_Data *this) {
 /*! Static initialization for the Cone class. */
 void Cone_class_init(Cone_Class *class) {
     /* TODO */
-    // Just subclass-specific methods?
-    this->getVolume = Cone_getVolume;
+    class->getVolume = Cone_getVolume;
 }
 
 
@@ -226,10 +218,9 @@ void Cone_class_init(Cone_Class *class) {
 void Cone_init(Cone_Data *this, Cone_Class *class, float BR, float H, float D) {
     /* TODO */
     // Call Shape constructor
-    this->class = class;
+    
     this->base_radius = BR;
     this->height = H;
-    this->density = D;
 }
 
 

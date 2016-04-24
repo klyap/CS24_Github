@@ -1,0 +1,4 @@
+movl 8(%ebp), %ebx	# (arg to getVolume) Shape data
+movl (%ebx), %ecx	# Dereference to get shape class
+movl (%ecx), %ebx	# Dereference class
+push 

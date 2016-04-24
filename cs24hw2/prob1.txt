@@ -1,9 +1,0 @@
-This code retrieves value from M[8 + ebp] into register %eax.
-Then it multiplies this value by a constant 3 using signed multiplication,
-storing product in %eax.
-The constant 12 is added to the value in %eax.
-This value is sign multiplied by the value M[8 + ebp] and stored in %eax.
-The constant 17 is subtracted from the value in %eax.
-
-The final computed value is:
-x(3x + 12) - 17
