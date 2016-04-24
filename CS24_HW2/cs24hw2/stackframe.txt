@@ -1,0 +1,13 @@
+0x1008	
+0x1004	3	(argument)
+0x1000		(return address)
+0x0ffc	%ebp	(base of frame pointer)
+0x0ff8	2	(argument)
+0x0ff4	0x2030	(return address)
+0x0ff0	0x0ffc	(base of frame pointer)
+0x0fec	1	(argument)
+0x0fe8	0x2030	(return address)
+0x0fe4	0x0ff0	(base of frame pointer)
+0x0fe0	0	(argument)
+0x0fdc	0x2030 	(return address)
+0x0fd8	0x0fe4	(base of frame pointer)
