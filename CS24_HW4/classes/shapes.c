@@ -219,8 +219,8 @@ void Cone_init(Cone_Data *this, Cone_Class *class, float BR, float H, float D) {
     /* TODO */
     // Call Shape constructor
     
-    this->base_radius = BR;
-    this->height = H;
+    Shape_init((Shape_Data *)this,(Shape_Class *) class, D);
+    Cone_setBaseHeight(this, BR, H);
 }
 
 
@@ -230,9 +230,9 @@ void Cone_init(Cone_Data *this, Cone_Class *class, float BR, float H, float D) {
  */
 Cone_Data * new_Cone(float BR, float H, float D) {
     /* TODO */
-    Cone new_cone = malloc(sizeof(Cone_Class));
-    Cone_init(new_cone, Cone_Class, BR, H, D);
-    return NULL;
+    Cone *new_cone = (Cone_Data *) malloc(sizeof(Cone_Class));
+    Cone_init(new_cone, &Cone, BR, H, D);
+    return new_cone;
 }
 
 
