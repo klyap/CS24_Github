@@ -284,7 +284,7 @@ void mark_eval_stack(PtrStack *eval_stack){
         }
 
         int j = 0;
-        printf("%d", &ev_ctx->local_vals.size);
+        //printf("%p", &ev_ctx->local_vals.size);
         printf("%d", *(&ev_ctx->local_vals.size));
 
         for (j = 0; j < &ev_ctx->local_vals.size; j++){
