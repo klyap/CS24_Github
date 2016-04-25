@@ -284,7 +284,7 @@ void mark_eval_stack(PtrStack *eval_stack){
         }
 
         int j = 0;
-        for (j = 0; j < &ev_ctx->local_vals->size; j++){
+        for (j = 0; j < &ev_ctx->local_vals.size; j++){
             Value **ppv = (Value **) pv_get_elem(&ev_ctx->local_vals, j);
             if (*ppv != NULL){
                 mark_value(*ppv);
