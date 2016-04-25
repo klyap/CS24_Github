@@ -1,0 +1,86 @@
+Part D: Random replacement, direct map
+----------------------------------------------
+(cs24vm)-(1) > ./heaptest 32:256:1
+Constructing memory for simulation (in reverse order):
+ * Building memory of size 4000000 bytes
+ * Building cache with a block-size of 32 bytes, 256 cache-sets,
+   and 1 cache-lines per set.  Total cache size is 8192 bytes.
+
+Generating 1000000 random floats to sort.
+Sorting numbers using the heap.
+Checking the results against the sorted inputs.
+
+Memory-Access Statistics:
+
+ * Cache reads=387851976 writes=156711356 hits=531488886 misses=13074446 
+   miss-rate=2.40% random replacement policy
+ * Memory reads=418382272 writes=334897760
+
+./heaptest 32:256:1  11.75s user 0.01s system 99% cpu 11.777 total
+
+
+
+Part E: Random replacement, fully associative
+----------------------------------------------
+(cs24vm) > ./heaptest 32:1:256    (~/CS24_Github/cs24hw5/cachesim on master !!)
+Constructing memory for simulation (in reverse order):
+ * Building memory of size 4000000 bytes
+ * Building cache with a block-size of 32 bytes, 1 cache-sets,
+   and 256 cache-lines per set.  Total cache size is 8192 bytes.
+
+Generating 1000000 random floats to sort.
+Sorting numbers using the heap.
+Checking the results against the sorted inputs.
+
+Memory-Access Statistics:
+
+ * Cache reads=387851976 writes=156711356 hits=531217776 misses=13345556 
+   miss-rate=2.45% random replacement policy
+ * Memory reads=427057792 writes=345422560
+
+./heaptest 32:1:256  52.68s user 0.07s system 99% cpu 52.774 total
+
+
+
+Part D: LRU, direct map
+------------------------------
+(cs24vm)-(1) > ./heaptest 32:256:1
+Constructing memory for simulation (in reverse order):
+ * Building memory of size 4000000 bytes
+ * Building cache with a block-size of 32 bytes, 256 cache-sets,
+   and 1 cache-lines per set.  Total cache size is 8192 bytes.
+
+Generating 1000000 random floats to sort.
+Sorting numbers using the heap.
+Checking the results against the sorted inputs.
+
+Memory-Access Statistics:
+
+ * Cache reads=387851976 writes=156711356 hits=531488886 misses=13074446 
+   miss-rate=2.40% LRU replacement policy
+ * Memory reads=418382272 writes=334897760
+
+./heaptest 32:256:1  13.28s user 0.01s system 99% cpu 13.304 total
+
+
+
+Part E: LRU, fully associative
+----------------------------------
+(cs24vm)-(130) > ./heaptest 32:1:256
+Constructing memory for simulation (in reverse order):
+ * Building memory of size 4000000 bytes
+ * Building cache with a block-size of 32 bytes, 1 cache-sets,
+   and 256 cache-lines per set.  Total cache size is 8192 bytes.
+
+Generating 1000000 random floats to sort.
+Sorting numbers using the heap.
+Checking the results against the sorted inputs.
+
+Memory-Access Statistics:
+
+ * Cache reads=387851976 writes=156711356 hits=532270889 misses=12292443 
+   miss-rate=2.26% LRU replacement policy
+ * Memory reads=393358176 writes=315978048
+
+./heaptest 32:1:256  57.45s user 0.06s system 99% cpu 57.564 total
+

@@ -1,15 +1,30 @@
 Part a
 ---------
-100 + 1 clock cycles / instruction = 101 cycles/instruction
+101 cycles/miss
+1 cycle/hit
 3 GHz = 3 billion cycles/sec
 
-Expect: 3 billion/101 = ___ instructions
-Miss rate: (___ - 750 million)/ ___ = 
+3Ghz = 1 * # of hits + 101 * # of misses
+# of hits + # of misses = 750 million
+
+Solving the system of equations, we get
+# of hits = 727 500 000
+# of misses = 22 500 000
+
+Miss rate = 22 500 000/750 million = 3%
+
 
 Part b
 ---------
-Current instructions/sec = 750 M/sec
-Doubling = 1500 M/sec
-1500 M = ___ - x
-x = ??
+Current instructions/sec = 750 million/sec
+Doubling = 1500 million/sec
+
+3 GHz = 1 * # of hits + 101 * # of misses
+# of hits + # of misses = 1500 million
+
+Solving the system of equations, we get
+# of hits = 1 485 000 000
+# of misses = 15 000 000
+
+New miss rate to double performance = 1%
 

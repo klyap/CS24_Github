@@ -127,6 +127,7 @@ unsigned char cache_read_byte(membase_t *mb, addr_t address) {
     
     /* Return the byte read by the requester. */
     p_cache->num_reads++;
+    p_line->time = clock_tick();
     return p_line->block[block_offset];
 }
 
@@ -139,6 +140,7 @@ void cache_write_byte(membase_t *mb, addr_t address, unsigned char value) {
     
     /* Write the byte specified by the requester. */
     p_cache->num_writes++;
+    p_line->time = clock_tick();
     p_line->block[block_offset] = value;
     p_line->dirty = 1;
 }
@@ -292,18 +294,16 @@ void decompose_address(cache_t *p_cache, addr_t address,
     assert(offset != NULL);
     
 
-    /* TODO:  IMPLEMENT */
-    int m = 0;
-    int s = p_cache->sets_addr_bits;
-    //int b = p_cache->block_offset_bits;
-    int b = p_cache->block_size;
-
-    *offset = get_offset_in_block(cache_t *p_cache, addr_t address);
-
-    *set = address >> b;
-    *set = *set & (s - 1);
-    *tag = address >> (b + s);
-
+    // Offset is the last bits of address.
+    *offset = get_offset_in_block(p_cache, address);
+    
+    // Set is the middle bits of address. 
+    // To get it, knock off the block offset bits and mask out the set bits.
+    *set = (address >> p_cache->block_offset_bits) & (p_cache->num_sets - 1);
+    
+    // Tag is the first bits of address.
+    // Just knock off the set and block offset bits to get it.
+    *tag = address >> (p_cache->block_offset_bits + p_cache->sets_addr_bits);
 
 }
 
@@ -314,11 +314,7 @@ void decompose_address(cache_t *p_cache, addr_t address,
  * the memory.
  */
 addr_t get_block_start_from_address(cache_t *p_cache, addr_t address) {
-    /* TODO:  IMPLEMENT */
-    //int s = p_cache->sets_addr_bits;
-    //int b = p_cache->block_size;
-    int b = ~(p_cache->block_offset_bits);
-    return address & b;
+    return address & (~(p_cache->block_size - 1));
 }
 
 
@@ -326,9 +322,9 @@ addr_t get_block_start_from_address(cache_t *p_cache, addr_t address) {
  * cache, and returns the offset within the block that the access occurs at.
  */
 addr_t get_offset_in_block(cache_t *p_cache, addr_t address) {
-    /* TODO:  IMPLEMENT */
-    int offset_mask = p_cache->block_size - 1;
-    return address & offset_mask;
+    // Since block_size is a power of 2, subtracting one makes a bit mask
+    // preserving the last bits.
+    return address & (p_cache->block_size - 1);
 }
 
 
@@ -339,12 +335,11 @@ addr_t get_offset_in_block(cache_t *p_cache, addr_t address) {
  */
 addr_t get_block_start_from_line_info(cache_t *p_cache,
                                       addr_t tag, addr_t set_no) {
-    /* TODO:  IMPLEMENT */
-    int s = p_cache->sets_addr_bits;
-    int b = p_cache->block_offset_bits;
-
-    
-    return (tag << s) | set_no;
+    // Want to get address in the form [tag][set][000...000]
+    // Shift tag over to append set bits to it and then pad out with the
+    // correct number of zeroes for block offset bits
+    return ((tag << p_cache->sets_addr_bits) | set_no) 
+        << p_cache->block_offset_bits;
 }
 
 
@@ -358,20 +353,17 @@ cacheline_t * find_line_in_set(cacheset_t *p_set, addr_t tag) {
 #if DEBUG_CACHE
     printf(" * Finding line with tag %u in cache set:\n", tag);
 #endif
-
-    /* TODO:  IMPLEMENT */
-    cacheline_t *cur_line = p_set->cache_lines;
+    
     for (int i = 0; i < p_set->num_lines; i++){
-        // Get tag portion of cache line
-        //decompose_address(cache_t *p_cache, addr_t address,
-        //            addr_t *tag, addr_t *set, addr_t *offset); 
-        addr_t cur_tag = cache_lines[i]->tag;
-        if (cur_tag == tag){
-            found_line = cache_lines[i];
+        // Get the next cache line
+        cacheline_t *cur_line = p_set->cache_lines + i;
+        
+        if (cur_line->valid == 1 && cur_line->tag == tag){
+            found_line = cur_line;
             break;
         }
     }
-
+    
     return found_line;
 }
 
@@ -384,15 +376,33 @@ cacheline_t * find_line_in_set(cacheset_t *p_set, addr_t tag) {
  */
 cacheline_t * choose_victim(cacheset_t *p_set) {
     cacheline_t *victim = NULL;
-    int i_victim;
+    int i;
     
 #if RANDOM_REPLACEMENT_POLICY
     /* Randomly choose a victim line to evict. */
-    i_victim = rand() % p_set->num_lines;
-    victim = p_set->cache_lines + i_victim;
+    i = rand() % p_set->num_lines;
+    victim = p_set->cache_lines + i;
 #else
-    /* TODO:  Implement the LRU eviction policy. */
-
+    /* Implementing the LRU eviction policy. */
+    victim = p_set->cache_lines;
+    if (victim->valid == 0){
+        return victim;
+    } else {
+        // If first victim is valid, then pick the cache line that was
+        // last accessed earliest.
+        int oldest = victim->time;
+        cacheline_t *chosen = victim;
+        
+        for (i = 1; i < p_set->num_lines; i++){
+            victim = p_set->cache_lines + i;
+            if (victim->time < oldest){
+                oldest = victim->time;
+                chosen = victim;
+            }
+        }
+        
+        return chosen;
+    }
 
     abort();
 #endif

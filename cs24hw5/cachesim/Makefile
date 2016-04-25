@@ -1,5 +1,5 @@
 # CC=gcc
-CFLAGS=-O2 -Wall -Werror
+CFLAGS=-g -O2 -Wall -Werror
 #CFLAGS=-g -O0 -Wall -Werror
 
 
