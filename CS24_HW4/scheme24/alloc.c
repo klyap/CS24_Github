@@ -7,7 +7,7 @@
 
 
 /*! Change to #define to output garbage-collector statistics. */
-#undef GC_STATS
+#define GC_STATS
 
 /*!
  * Change to #undef to cause the garbage collector to only run when it has to.
