@@ -218,53 +218,96 @@ void free_environment(Environment *env) {
 ////// TODO /////////
 void mark_environment(Environment *env){
     // Find non-NULL parent environments
-    for (int i = 0; i < env->num_bindings; i++){
-        mark_value(env->bindings[i].value);
+    while(env != NULL && env->marked == 0){
+        int i = 0;
+        env->marked = 1;
+        for (i = 0; i < env->num_bindings; i++){
+            mark_value(env->bindings[i].value);
+        }
+        env = env->parent_env;
     }
+    
 }
 
 void mark_eval_stack(PtrStack *eval_stack){
-    // iterate through stack by popping? peeking?
-    // check first 3 members for NULL
-    // local_vals is a double pointer
-    Value **ppv = (Value **) pv_getelem(&ctx->local_vals, idx_local);
-    if (*ppv != NULL){
-        mark_value(*ppv);
+
+    int i = 0;
+    for (i = 0; i < eval_stack->size; i++){
+        EvaluationContext *ev_ctx = (EvaluationContext *) pv_get_elem(eval_stack, i);
+        
+        if (ev_ctx->current_env != NULL){
+            mark_environment(ev_ctx->current_env);
+        }
+
+        if (ev_ctx->expression != NULL){
+            mark_value(ev_ctx->expression);
+        }
+
+        if (ev_ctx->child_eval_result != NULL){
+            mark_value(ev_ctx->child_eval_result);
+        }
+
+        int j = 0;
+        for (j = 0; j < &env_ctx->local_vals->size; j++){
+            Value **ppv = (Value **) pv_get_elem(&env_ctx->local_vals, j);
+            if (*ppv != NULL){
+                mark_value(*ppv);
+            }
+        }
     }
 }
 
 void mark_value(Value *v){
-    // how to deal with cons pairs??
-    v->marked = 1;
-    if (v->type == "ConsPair"){
-        mark_value(v->p_car);
-        mark_value(v->p_cdr);
+    while(v->marked == 0){
+        v->marked = 1;
+        if (v->type == T_ConsPair){
+            mark_value(v->cons_val.p_car);
+            mark_value(v->cons_val.p_cdr);
+        } else if (v->type == T_Lambda){
+            mark_lambda(v->lambda_val);
+        }
     }
+    
 }
 
 void mark_lambda(Lambda *f){
+    f->marked = 1;
+
     if (f->native_impl == 0){
         mark_value(f->arg_spec);
         mark_value(f->body);
     }
-    f->marked;
+
+    mark_environment(f->parent_env);
+
 }
 
 void sweep_values(){
-    
+    Value *func;
+    for (int i; i < allocated_values.size; i++){
+        func = (Lambda *) pv_get_elem(&allocated_values, i);
+        if (func->marked == 1){
+            func->marked == 0;
+        } else {
+            free_lambda(func);
+            pv_set_elem(&allocated_values, i, NULL)
+        }
+    }
+    pv_compact(&allocated_values);
 }
 
 void sweep_lambdas(){
     Lambda *func;
-    for (int i; i < len(allocated_lambdas){
+    for (int i; i < allocated_lambdas.size; i++){
         func = (Lambda *) pv_get_elem(&allocated_lambdas, i);
         if (func->marked == 1){
             func->marked == 0;
         } else {
             free_lambda(func);
+            pv_set_elem(&allocated_lambdas, i, NULL)
         }
     }
-    pv_compact(func);
+    pv_compact(&allocated_lambdas);
     
 }
 
@@ -308,6 +351,11 @@ void collect_garbage() {
     eval_stack = get_eval_stack();
 
     /* ... TODO ... */
+    mark_environment(global_env);
+    mark_eval_stack(eval_stack);
+    sweep_values();
+    sweep_lambdas();
+    sweep_environments();
 
 #ifndef ALWAYS_GC
     /* If we are still above the maximum allocation size, increase it. */
