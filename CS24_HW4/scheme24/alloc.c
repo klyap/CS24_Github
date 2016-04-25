@@ -27,6 +27,15 @@ void free_value(Value *v);
 void free_lambda(Lambda *f);
 void free_environment(Environment *env);
 
+// TODO: My functions
+void mark_value(Value *v);
+void mark_lambda(Lambda *f);
+void mark_environment(Environment *env);
+void mark_eval_stack(PtrStack *eval_stack);
+void sweep_environment();
+void sweep_lambda();
+void sweep_value();
+
 
 /*========================================================*
  * TODO:  Declarations of your functions might go here... *
@@ -216,18 +225,7 @@ void free_environment(Environment *env) {
 }
 
 ////// TODO /////////
-void mark_value(Value *v){
-    while(v->marked == 0){
-        v->marked = 1;
-        if (v->type == T_ConsPair){
-            mark_value(v->cons_val.p_car);
-            mark_value(v->cons_val.p_cdr);
-        } else if (v->type == T_Lambda){
-            mark_lambda(v->lambda_val);
-        }
-    }
-    
-}
+
 
 void mark_lambda(Lambda *f){
     f->marked = 1;
@@ -239,6 +237,19 @@ void mark_lambda(Lambda *f){
 
     mark_environment(f->parent_env);
 
+}
+
+void mark_value(Value *v){
+    while(v->marked == 0){
+        v->marked = 1;
+        if (v->type == T_ConsPair){
+            mark_value(v->cons_val.p_car);
+            mark_value(v->cons_val.p_cdr);
+        } else if (v->type == T_Lambda){
+            mark_lambda(v->lambda_val);
+        }
+    }
+    
 }
 
 void mark_environment(Environment *env){
@@ -286,12 +297,12 @@ void mark_eval_stack(PtrStack *eval_stack){
 void sweep_values(){
     Value *val;
     for (int i; i < allocated_values.size; i++){
-        val = (Lambda *) pv_get_elem(&allocated_values, i);
+        val = (Value *) pv_get_elem(&allocated_values, i);
         if (val->marked == 1){
-            val->marked == 0;
+            val->marked = 0;
         } else {
             free_value(val);
-            pv_set_elem(&allocated_values, i, NULL)
+            pv_set_elem(&allocated_values, i, NULL);
         }
     }
     pv_compact(&allocated_values);
@@ -305,14 +316,26 @@ void sweep_lambdas(){
             func->marked = 0;
         } else {
             free_lambda(func);
-            pv_set_elem(&allocated_lambdas, i, NULL)
+            pv_set_elem(&allocated_lambdas, i, NULL);
         }
     }
     pv_compact(&allocated_lambdas);
     
 }
 
-void sweep_environments(){}
+void sweep_environments(){
+    Environment *env;
+    for (int i; i < allocated_environments.size; i++){
+        env = (Environment *) pv_get_elem(&allocated_environments, i);
+        if (env->marked == 1){
+            env->marked = 0;
+        } else {
+            free_environment(env);
+            pv_set_elem(&allocated_environments, i, NULL);
+        }
+    }
+    pv_compact(&allocated_environments);
+}
 
 
 /*!
