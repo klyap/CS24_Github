@@ -52,7 +52,6 @@ void Shape_init(Shape_Data *this, Shape_Class *class, float D) {
     /* TODO */
     this->class = class;
     Shape_setDensity(this, D);
-    this->mass = Shape_getMass(this);
 }
 
 
