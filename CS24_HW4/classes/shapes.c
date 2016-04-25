@@ -194,7 +194,7 @@ void Sphere_setRadius(Sphere_Data *this, float R) {
  */
 float Sphere_getVolume(Sphere_Data *this) {
     /* TODO */
-    return (4/3) * 3.14159 * this->R * this->R * this->R;
+    return (4/3) * 3.14159 * this->radius * this->radius * this->radius;
 }
 
 
@@ -230,7 +230,7 @@ void Cone_init(Cone_Data *this, Cone_Class *class, float BR, float H, float D) {
  */
 Cone_Data * new_Cone(float BR, float H, float D) {
     /* TODO */
-    Cone *new_cone = (Cone_Data *) malloc(sizeof(Cone_Class));
+    Cone_Data *new_cone = (Cone_Data *) malloc(sizeof(Cone_Class));
     Cone_init(new_cone, &Cone, BR, H, D);
     return new_cone;
 }
