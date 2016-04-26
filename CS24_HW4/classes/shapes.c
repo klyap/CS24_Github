@@ -178,7 +178,7 @@ void Sphere_class_init(Sphere_Class *class) {
 void Sphere_init(Sphere_Data *this, Sphere_Class *class, float R, float D) {
     /* TODO */
     Shape_init((Shape_Data *)this,(Shape_Class *) class, D);
-    Box_class_init(class);
+    Sphere_class_init(class);
     Sphere_setRadius(this, R);
     
 }
