@@ -292,7 +292,7 @@ void mark_eval_stack(PtrStack *eval_stack){
 
         int j = 0;
         //printf("%p", &ev_ctx->local_vals.size);
-        printf("%d", *(&ev_ctx->local_vals.size));
+        printf("AAAAAGGGGHHHHHHHHH %d", *(&ev_ctx->local_vals.size));
 
         for (j = 0; j < *(&ev_ctx->local_vals.size); j++){
             Value **ppv = (Value **) pv_get_elem(&ev_ctx->local_vals, j);
@@ -385,9 +385,10 @@ void collect_garbage() {
     eval_stack = get_eval_stack();
 
     /* ... TODO ... */
+    printf("---------MARKING--------");
     mark_environment(global_env);
     mark_eval_stack(eval_stack);
-
+    printf("---------SWEEPING--------");
     sweep_environments();
     sweep_lambdas();
     sweep_values();
