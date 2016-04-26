@@ -1,6 +1,7 @@
 #include "shapes.h"
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 /*============================================================================
  * Global State
@@ -271,7 +272,7 @@ Cone_Data * new_Cone(float BR, float H, float D) {
     }
 
     Cone_init(new_cone, new_cone_class, BR, H, D);
-    
+
     return new_cone;
 }
 
