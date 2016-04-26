@@ -259,7 +259,7 @@ void Cone_init(Cone_Data *this, Cone_Class *class, float BR, float H, float D) {
  */
 Cone_Data * new_Cone(float BR, float H, float D) {
     /* TODO */
-    Cone_Data *new_cone = (Cone_Data *) malloc(sizeof(Cone_Class));
+    Cone_Data *new_cone = (Cone_Data *) malloc(sizeof(Cone_Data));
     if (new_cone == NULL){
         printf("Error: malloc returned NULL");
         return NULL;
