@@ -265,7 +265,7 @@ void mark_environment(Environment *env){
         env = env->parent_env;
     }*/
     int i = 0;
-    assert(env != NULL && env->marked == 0);
+    assert(env != NULL);
     env->marked = 1;
     for (i = 0; i < env->num_bindings; i++){
         mark_value(env->bindings[i].value);
