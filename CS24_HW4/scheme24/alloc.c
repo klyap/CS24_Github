@@ -280,23 +280,23 @@ void mark_eval_stack(PtrStack *eval_stack){
         EvaluationContext *ev_ctx = (EvaluationContext *) pv_get_elem(eval_stack, i);
         
         if (ev_ctx->current_env != NULL){
-            printf("-- mark_eval_stack: Marking current_evn");
+            printf("-- mark_eval_stack: Marking current_evn\n");
             mark_environment(ev_ctx->current_env);
         }
 
         if (ev_ctx->expression != NULL){
-            printf("-- mark_eval_stack: Marking expression");
+            printf("-- mark_eval_stack: Marking expression\n");
             mark_value(ev_ctx->expression);
         }
 
         if (ev_ctx->child_eval_result != NULL){
-            printf("-- mark_eval_stack: Marking child_eval_result");
+            printf("-- mark_eval_stack: Marking child_eval_result\n");
             mark_value(ev_ctx->child_eval_result);
         }
 
         int j = 0;
         //printf("%p", &ev_ctx->local_vals.size);
-        printf("--Local values of eval stack: %d\n", *(&ev_ctx->local_vals.size));
+        printf("-- mark_eval_stack: local values of eval stack: %d\n", *(&ev_ctx->local_vals.size));
 
         for (j = 0; j < *(&ev_ctx->local_vals.size); j++){
             Value **ppv = (Value **) pv_get_elem(&ev_ctx->local_vals, j);
@@ -313,8 +313,10 @@ void sweep_values(){
     for (int i; i < allocated_values.size; i++){
         val = (Value *) pv_get_elem(&allocated_values, i);
         if (val->marked == 1){
+            printf("-- sweep_values: unmarking\n");
             val->marked = 0;
         } else {
+            printf("-- sweep_values: freeing\n");
             free_value(val);
             pv_set_elem(&allocated_values, i, NULL);
         }
@@ -327,8 +329,10 @@ void sweep_lambdas(){
     for (int i; i < allocated_lambdas.size; i++){
         func = (Lambda *) pv_get_elem(&allocated_lambdas, i);
         if (func->marked == 1){
+            printf("-- sweep_lambdas: unmarking\n");
             func->marked = 0;
         } else {
+            printf("-- sweep_lambdas: freeing\n");
             free_lambda(func);
             pv_set_elem(&allocated_lambdas, i, NULL);
         }
@@ -342,8 +346,10 @@ void sweep_environments(){
     for (int i; i < allocated_environments.size; i++){
         env = (Environment *) pv_get_elem(&allocated_environments, i);
         if (env->marked == 1){
+            printf("-- sweep_environments: unmarking\n");
             env->marked = 0;
         } else {
+            printf("-- sweep_environments: freeing\n");
             free_environment(env);
             pv_set_elem(&allocated_environments, i, NULL);
         }
