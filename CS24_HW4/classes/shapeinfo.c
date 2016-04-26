@@ -22,7 +22,7 @@ void print_info(const char *type, Shape_Data *s) {
 int main() {
     //Cone_Data *c;
     Box_Data *b;
-    //Sphere_Data *s;
+    Sphere_Data *s;
 
     /* Initialize the class information for all classes. */
     static_init();
@@ -37,9 +37,9 @@ int main() {
     print_info("box", (Shape_Data *) b);
     free(b);
 
-    /*s = new_Sphere(0.3, 10);
+    s = new_Sphere(0.3, 10);
     print_info("sphere", (Shape_Data *) s);
-    free(s);*/
+    free(s);
 
     return 0;
 }
