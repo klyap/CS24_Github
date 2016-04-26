@@ -295,7 +295,7 @@ void Cone_setBaseHeight(Cone_Data *this, float BR, float H) {
  */
 float Cone_getVolume(Cone_Data *this) {
     /* TODO */
-    return (1 / 3) * 3.14159 * this->base_radius * this->base_radius
+    return (1.0 / 3.0) * 3.14159 * this->base_radius * this->base_radius
      * this->height;
 }
 
