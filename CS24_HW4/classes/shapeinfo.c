@@ -20,9 +20,9 @@ void print_info(const char *type, Shape_Data *s) {
 
 /* A test program for the shape classes! */
 int main() {
-    Cone_Data *c;
+    //Cone_Data *c;
     Box_Data *b;
-    Sphere_Data *s;
+    //Sphere_Data *s;
 
     /* Initialize the class information for all classes. */
     static_init();
