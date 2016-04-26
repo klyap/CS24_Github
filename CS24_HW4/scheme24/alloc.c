@@ -20,7 +20,7 @@
 
 
 /* Change to #define for other verbose output. */
-#undef VERBOSE
+#define VERBOSE
 
 
 void free_value(Value *v);
