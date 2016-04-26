@@ -50,6 +50,7 @@ void Shape_class_init(Shape_Class *class) {
  */
 void Shape_init(Shape_Data *this, Shape_Class *class, float D) {
     /* TODO */
+    Shape_class_init(class);
     this->class = class;
     Shape_setDensity(this, D);
 }
@@ -103,6 +104,7 @@ void Box_init(Box_Data *this, Box_Class *class,
     float L, float W, float H, float D) {
     /* TODO */
     Shape_init((Shape_Data *) this, (Shape_Class *) class, D);
+    Box_class_init(class);
     Box_setSize(this, L, W, H);
 }
 
@@ -114,7 +116,19 @@ void Box_init(Box_Data *this, Box_Class *class,
 Box_Data * new_Box(float L, float W, float H, float D) {
     /* TODO */
     Box_Data *new_box = (Box_Data *) malloc(sizeof(Box_Data));
-    Box_init(new_box, &Box, L, W, H, D);
+    if (new_box == NULL){
+        printf("Error: malloc returned NULL");
+        return NULL;
+    }
+
+    Box_Class *new_box_class = (Box_Class *) malloc(sizeof(Box_Class));
+    if (new_box_class == NULL){
+        printf("Error: malloc returned NULL");
+        return NULL;
+    }
+
+    Box_init(new_box, new_box_class, L, W, H, D);
+
     return new_box;
 }
 
@@ -163,6 +177,7 @@ void Sphere_class_init(Sphere_Class *class) {
 void Sphere_init(Sphere_Data *this, Sphere_Class *class, float R, float D) {
     /* TODO */
     Shape_init((Shape_Data *)this,(Shape_Class *) class, D);
+    Box_class_init(class);
     Sphere_setRadius(this, R);
     
 }
@@ -175,7 +190,19 @@ void Sphere_init(Sphere_Data *this, Sphere_Class *class, float R, float D) {
 Sphere_Data * new_Sphere(float R, float D) {
     /* TODO */
     Sphere_Data *new_sphere = (Sphere_Data *) malloc(sizeof(Sphere_Data));
-    Sphere_init(new_sphere, &Sphere, R, D);
+    if (new_sphere == NULL){
+        printf("Error: malloc returned NULL");
+        return NULL;
+    }
+
+    Sphere_Class *new_sphere_class = (Sphere_Class *) malloc(sizeof(Sphere_Class));
+    if (new_sphere_class == NULL){
+        printf("Error: malloc returned NULL");
+        return NULL;
+    }
+
+    Sphere_init(new_sphere, new_sphere_class, R, D);
+
     return new_sphere;
 }
 
@@ -220,6 +247,7 @@ void Cone_init(Cone_Data *this, Cone_Class *class, float BR, float H, float D) {
     // Call Shape constructor
     
     Shape_init((Shape_Data *)this,(Shape_Class *) class, D);
+    Cone_class_init(class);
     Cone_setBaseHeight(this, BR, H);
 }
 
@@ -231,7 +259,19 @@ void Cone_init(Cone_Data *this, Cone_Class *class, float BR, float H, float D) {
 Cone_Data * new_Cone(float BR, float H, float D) {
     /* TODO */
     Cone_Data *new_cone = (Cone_Data *) malloc(sizeof(Cone_Class));
-    Cone_init(new_cone, &Cone, BR, H, D);
+    if (new_cone == NULL){
+        printf("Error: malloc returned NULL");
+        return NULL;
+    }
+
+    Cone_Class *new_cone_class = (Cone_Class *) malloc(sizeof(Cone_Class));
+    if (new_cone_class == NULL){
+        printf("Error: malloc returned NULL");
+        return NULL;
+    }
+
+    Cone_init(new_cone, new_cone_class, BR, H, D);
+    
     return new_cone;
 }
 
