@@ -20,7 +20,7 @@ void print_info(const char *type, Shape_Data *s) {
 
 /* A test program for the shape classes! */
 int main() {
-    //Cone_Data *c;
+    Cone_Data *c;
     Box_Data *b;
     Sphere_Data *s;
 
@@ -29,9 +29,9 @@ int main() {
 
     printf("\n");
 
-    /*c = new_Cone(1.5, 5, 0.5);
+    c = new_Cone(1.5, 5, 0.5);
     print_info("cone", (Shape_Data *) c);
-    free(c);*/
+    free(c);
 
     b = new_Box(5.3, 2.1, 7.7, 3);
     print_info("box", (Shape_Data *) b);

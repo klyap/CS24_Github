@@ -247,7 +247,7 @@ void Cone_init(Cone_Data *this, Cone_Class *class, float BR, float H, float D) {
     /* TODO */
     // Call Shape constructor
     
-    Shape_init((Shape_Data *)this,(Shape_Class *) class, D);
+    Shape_init((Shape_Data *) this, (Shape_Class *) class, D);
     Cone_class_init(class);
     Cone_setBaseHeight(this, BR, H);
 }
