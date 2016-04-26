@@ -29,9 +29,7 @@ int main() {
 
     printf("\n");
 
-    c = new_Cone(1.5, 5, 0.5);
-    print_info("cone", (Shape_Data *) c);
-    free(c);
+    
 
     b = new_Box(5.3, 2.1, 7.7, 3);
     print_info("box", (Shape_Data *) b);
@@ -40,6 +38,10 @@ int main() {
     s = new_Sphere(0.3, 10);
     print_info("sphere", (Shape_Data *) s);
     free(s);
+
+    c = new_Cone(1.5, 5, 0.5);
+    print_info("cone", (Shape_Data *) c);
+    free(c);
 
     return 0;
 }
