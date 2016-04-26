@@ -231,11 +231,12 @@ void mark_lambda(Lambda *f){
     f->marked = 1;
 
     if (f->native_impl == 0){
+
         mark_value(f->arg_spec);
         mark_value(f->body);
     }
 
-    mark_environment(f->parent_env);
+    mark_value((Value *)&(f->func));
 
 }
 
@@ -254,15 +255,21 @@ void mark_value(Value *v){
 
 void mark_environment(Environment *env){
     // Find non-NULL parent environments
-    while(env != NULL && env->marked == 0){
+    // try assert?
+    /*while(env != NULL && env->marked == 0){
         int i = 0;
         env->marked = 1;
         for (i = 0; i < env->num_bindings; i++){
             mark_value(env->bindings[i].value);
         }
         env = env->parent_env;
+    }*/
+    int i = 0;
+    assert(env != NULL && env->marked == 0);
+    env->marked = 1;
+    for (i = 0; i < env->num_bindings; i++){
+        mark_value(env->bindings[i].value);
     }
-    
 }
 
 void mark_eval_stack(PtrStack *eval_stack){
@@ -380,9 +387,10 @@ void collect_garbage() {
     /* ... TODO ... */
     mark_environment(global_env);
     mark_eval_stack(eval_stack);
-    sweep_values();
-    sweep_lambdas();
+
     sweep_environments();
+    sweep_lambdas();
+    sweep_values();
 
 #ifndef ALWAYS_GC
     /* If we are still above the maximum allocation size, increase it. */
