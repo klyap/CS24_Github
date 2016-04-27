@@ -61,7 +61,7 @@ int h(int x){
         longjmp(env, 1);
     }
 
-    return sqrt(x-5);
+    return x-5;
 }
 
 int g(int x){
@@ -83,12 +83,13 @@ int f(int x){
 
 int main(int argc, char *argv[]) {
 	// TODO: Need functions with try/catch blocks and env to test on
-    printf("Testing plain setjmp: ");
-    f(0);
-    printf("Longjmp returns 1: ");
-    f(5);
-    printf("Longjmp returns n / jumps multiple functions: ");
-    f(2);
+    
+    int a = f(0);
+    printf("Testing plain setjmp: %d", a);
+    int b = f(5);
+    printf("Longjmp returns 1: %d", b);
+    int c = f(2);
+    printf("Longjmp returns n / jumps multiple functions: %d", c);
 
 	/*printf("Testing plain setjmp: ");
     test3(0);
