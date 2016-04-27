@@ -11,30 +11,37 @@ my_setjmp:
 	pushl %ebp         	/* Push old base pointer. */
 	movl %esp,%ebp	   	/* Current stack is new base. */
 	movl 8(%ebp), %ecx	/* Store jmp_buf. */
-	movl %esp, (%ecx)	/* Move to jmp_buf */
-	movl %ebx, 4(%ecx)         	/* Push callee save registers. */
-	movl %esi, 8(%ecx)         /* Push callee save registers. */
-	movl %edi, 12(%ecx)        /* Push callee save registers. */
-	movl %esp, 16(%ecx)        /* Push stack frame. */
+	movl %esp, (%ecx)	/* Move to jmp_buf (and push stack pointer) */
+	movl %ebx, 4(%ecx)  /* Push callee save registers. */
+	movl %esi, 8(%ecx)  /* Push callee save registers. */
+	movl %edi, 12(%ecx) /* Push callee save registers. */
+	movl 4(%ebp), %edx	/* Temp storage */
+	movl %edx, 16(%ecx) /* Push return address. */
+	movl %ebp, 20(%ecx) /* Push base pointer */
+
+	/*movl %esp, 16(%ecx)         Push stack frame. */
 	
 	xor %eax, %eax		/* Set %eax to 0
 
-	popl %ebp          /* Pop old base of frame. */
-	ret
+	popl %ebp           /* Pop old base of frame. */
+	ret 				/* Return */
 
 my_longjmp:
 	pushl %ebp         	/* Push old base pointer. */
 	movl %esp,%ebp	   	/* Current stack is new base. */
-	movl 12(%ebp), %eax	/* Store ret */
+	movl 12(%ebp), %eax	/* Store ret value*/
 	movl 8(%ebp), %ecx	/* Store jmp_buf */
-	movl 4(%ecx), %ebx         	/* Restore callee save registers. */
-	movl 8(%ecx), %esi          /* Restore callee save registers. */
-	movl 12(%ecx), %edi         /* Restore callee save registers. */
-	movl 16(%ecx), %esp        /* Restore stack frame. */
+	movl (%ecx), %esp	/* Restore stack pointer */
+	movl 4(%ecx), %ebx  /* Restore callee save registers. */
+	movl 8(%ecx), %esi  /* Restore callee save registers. */
+	movl 12(%ecx), %edi /* Restore callee save registers. */
+	movl 16(%ecx), %edx	/* Temp storage */
+	movl %edx, 4(%esp)  /* Restore return address. */
+	movl 20(%ecx), %ebp	/* Restore base pointer */
 	cmpl $0, %eax		/* If ret != 0 */
 	jnz done			/* go to return 0 */
 	movl $1, %eax		/* Else go to return 1 */
 done:
-	popl %ebp          /* Pop old base of frame. */
-	ret
+	popl %ebp           /* Pop old base of frame. */
+	ret 				/* Return */
 
