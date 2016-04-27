@@ -62,7 +62,7 @@ int h(int x){
         longjmp(env, 1);
     }
 
-    printf("PASS\n");
+    printf("PASS: Testing regular setjmp with no exceptions thrown\n");
     return x-5;
 }
 
@@ -79,7 +79,7 @@ int no_exceptions(){
         return g(3 * x);
     } else {
         //printf("Longjmped back: %d\n", setjmp(env));
-        printf("FAIL\n");
+        printf("FAIL: Testing regular setjmp with no exceptions thrown\n");
         return -1;
     }
 }
@@ -92,7 +92,7 @@ int jump_across(){
         return g(3 * x);
     } else {
         //printf("Longjmped back: %d\n", setjmp(env));
-        printf("PASS\n");
+        printf("PASS: Testing jumping across functions\n");
         return -1;
     }
 }
@@ -117,9 +117,9 @@ void jump_within(){
         if (x == 1){
             longjmp(env, 1);
         }
-        printf("FAIL\n");
+        printf("FAIL: Test jump within function\n");
     } else {
-        printf("PASS\n");
+        printf("PASS: Test jump within function\n");
     }
 
 }
@@ -164,7 +164,9 @@ int main(int argc, char *argv[]) {
     int d = f(1);
     printf("Longjmp within function: %d", d);*/
 
-    jump_across();
+    if (jump_across() != -1){
+        printf("FAIL: Testing jumping across functions\n");
+    };
     no_exceptions();
     jump_within();
     corruption_check();
