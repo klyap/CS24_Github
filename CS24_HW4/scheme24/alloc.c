@@ -229,6 +229,7 @@ void mark_value(Value *v);
 void mark_environment(Environment *env);
 
 void mark_lambda(Lambda *f){
+    printf("--mark_lambda");
     f->marked = 1;
 
     if (f->native_impl == 0){
@@ -338,7 +339,7 @@ void sweep_lambdas(){
     Lambda *func;
     int i;
     for (i = 0; i < allocated_lambdas.size; i++){
-        //printf("-- sweep_lambdas: checking element %d\n", i);
+        printf("-- sweep_lambdas: checking element %d\n", i);
         func = (Lambda *) pv_get_elem(&allocated_lambdas, i);
         if (func->marked == 1){
             //printf("-- sweep_lambdas: unmarking\n");
