@@ -1,6 +1,18 @@
-movl 8(%ebp), %ebx	# The arg to getVolume is shape data pointer
+# These instructions call getVolume() on a initialized Shape subclass
+# stored in 8(%ebp), ignoring callee/caller save registers and
+# float returns. 
+# 
+# First the initialized object is a Shape data pointer (ie "*this").
+# To access the associated subclass getVolume function, we need to
+# dereference once to get the Shape class pointer and 
+# dereference again to get the getVolume function pointer. 
+# Then we can push the Shape data pointer as the argument
+# and call the function pointed at by the getVolume function pointer.
+
+
+movl 8(%ebp), %ebx	# Store the shape data pointer
 movl (%ebx), %ecx	# Dereference to get shape class pointer
 movl (%ecx), %ecx	# Dereference to get getVolume function pointer
-push %ebx			# Push argument to getVolume
+push %ebx			# Push argument to getVolume (shape data pointer)
 call (%ecx)			# call getVolume
 	

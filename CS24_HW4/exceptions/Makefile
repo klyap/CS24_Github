@@ -1,4 +1,4 @@
-OBJS = c_except.o my_setjmp.o ptr_vector.o divider.o test_setjmp.o
+OBJS = c_except.o my_setjmp.o ptr_vector.o divider.o
 OBS2 = c_except.o my_setjmp.o ptr_vector.o test_setjmp.o
 CC = gcc
 CFLAGS=-g -Wall -Werror
