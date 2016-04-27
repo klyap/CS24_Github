@@ -70,6 +70,10 @@ int g(int x){
 }
 
 int f(int x){
+    if (x == 1){
+        longjmp(env, 1);
+    }
+    
     if (setjmp(env) == 0){
         printf("Regular setjmp 1\n");
         return g(3 * x);
@@ -77,9 +81,7 @@ int f(int x){
         printf("Longjmped back: %d\n", setjmp(env));
         return -1;
     }
-    if (x == 1){
-        longjmp(env, 1);
-    }
+    
 
 }
 
