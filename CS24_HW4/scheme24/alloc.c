@@ -353,6 +353,7 @@ void sweep_environments(){
     printf("-- sweep_environments: allocated_environments size = %d\n", allocated_environments.size);
     Environment *env;
     for (int i; i < allocated_environments.size; i++){
+        printf("-- sweep_environments: checking element %d\n", i);
         env = (Environment *) pv_get_elem(&allocated_environments, i);
         if (env->marked == 1){
             printf("-- sweep_environments: unmarking\n");
