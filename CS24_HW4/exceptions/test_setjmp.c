@@ -78,10 +78,10 @@ int f(int x){
     }
 }
 
-int test_within(int x){
+void test_within(double x){
     TRY (
-        int n1 = x;
-        int n2 = x;
+        double n1 = x;
+        double n2 = x;
         printf("The quotient of %lg / %lg is: %lg\n", n1, n2, n1/n2);
     )
     CATCH (NUMBER_PARSE_ERROR,
@@ -106,11 +106,14 @@ int main(int argc, char *argv[]) {
     int c = f(2);
     printf("Longjmp returns n / jumps multiple functions: %d", c);
 
-    int d = test_within(0);
-    printf("Test within on DIVIDE_BY_ZERO: %d", d);
-    int e = test_within(1);
-    printf("Test within: %d", e);
-	/*printf("Testing plain setjmp: ");
+    test_within(0.0);
+    //printf("Test within on DIVIDE_BY_ZERO: %d", d);
+    test_within(1.0);
+    //printf("Test within: %d", e);
+    test_within(1);
+    //printf("Test within: %d", e);
+	test_within('a');
+    /*printf("Testing plain setjmp: ");
     test3(0);
     printf("Longjmp returns 1: ");
     test3(1);
