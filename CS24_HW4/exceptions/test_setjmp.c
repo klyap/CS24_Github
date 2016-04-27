@@ -62,6 +62,7 @@ int g(int x){
 
 int f(int x){
     if (setjmp(env) == 0){
+        printf("Regular setjmp\n");
         return g(x);
         printf("Regular setjmp\n");
     } else if (setjmp(env) == 1){
@@ -72,7 +73,7 @@ int f(int x){
         printf("Returned n\n");
         return -1;
     } else {
-        printf("FAIL\n");
+        printf("FAIL: %d\n", setjmp(env));
         return -1;
     }
 }
@@ -99,6 +100,7 @@ int main(int argc, char *argv[]) {
     printf("Longjmp returns n / jumps multiple functions: ");
     f(2);
     printf("No corruption: ");
+    corruption_check();
 
     return 0;
 }
