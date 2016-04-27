@@ -335,17 +335,17 @@ void sweep_values(){
 }
 
 void sweep_lambdas(){
-    printf("-- sweep_lambdas: allocated_lambdas size = %d\n", allocated_lambdas.size);
+    //printf("-- sweep_lambdas: allocated_lambdas size = %d\n", allocated_lambdas.size);
     Lambda *func;
     int i;
     for (i = 0; i < allocated_lambdas.size; i++){
-        printf("-- sweep_lambdas: checking element %d\n", i);
+        //printf("-- sweep_lambdas: checking element %d\n", i);
         func = (Lambda *) pv_get_elem(&allocated_lambdas, i);
         if (func->marked == 1){
             //printf("-- sweep_lambdas: unmarking\n");
             func->marked = 0;
         } else {
-            //printf("-- sweep_lambdas: freeing\n");
+            printf("-- sweep_lambdas: freeing\n");
             free_lambda(func);
             pv_set_elem(&allocated_lambdas, i, NULL);
         }
