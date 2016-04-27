@@ -154,14 +154,17 @@ int main(int argc, char *argv[]) {
     // test_within('a');
 
     int a = f(0);
-    printf("Testing plain setjmp: %d", a);
+    //printf("Testing plain setjmp: %d", a);
     int b = f(5);
-    printf("Longjmp returns 1: %d", b);
+    //printf("Longjmp returns 1: %d", b);
     int c = f(2);
-    printf("Longjmp returns n / jumps multiple functions: %d", c);
+    //printf("Longjmp returns n / jumps multiple functions: %d", c);
     int d = f(1);
     printf("Longjmp within function: %d", d);
 
+    jump_across();
+    no_exceptions();
+    jump_within();
     
 
     /*printf("Testing plain setjmp: ");
