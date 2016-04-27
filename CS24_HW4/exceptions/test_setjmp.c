@@ -80,7 +80,7 @@ int f(int x){
 
 void test_within(double x){
     TRY (
-        double n1 = x;
+        double n1 = 1;
         double n2 = x;
         printf("The quotient of %lg / %lg is: %lg\n", n1, n2, n1/n2);
     )
