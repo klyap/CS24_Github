@@ -225,7 +225,8 @@ void free_environment(Environment *env) {
 }
 
 ////// TODO /////////
-
+void mark_value(Value *v);
+void mark_environment(Environment *env);
 
 void mark_lambda(Lambda *f){
     f->marked = 1;
