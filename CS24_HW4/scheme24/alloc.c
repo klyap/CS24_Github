@@ -318,6 +318,7 @@ void sweep_values(){
     printf("-- sweep_values: allocated_values size = %d\n", allocated_values.size);
     Value *val;
     for (int i; i < allocated_values.size; i++){
+        printf("-- sweep_values: checking element %d\n", i);
         val = (Value *) pv_get_elem(&allocated_values, i);
         if (val->marked == 1){
             printf("-- sweep_values: unmarking\n");
@@ -335,6 +336,7 @@ void sweep_lambdas(){
     printf("-- sweep_lambdas: allocated_lambdas size = %d\n", allocated_lambdas.size);
     Lambda *func;
     for (int i; i < allocated_lambdas.size; i++){
+        printf("-- sweep_lambdas: checking element %d\n", i);
         func = (Lambda *) pv_get_elem(&allocated_lambdas, i);
         if (func->marked == 1){
             printf("-- sweep_lambdas: unmarking\n");
