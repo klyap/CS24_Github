@@ -19,7 +19,7 @@ int corruption_check_right = 0;
 
 
 /*void longjmp_return_1() {
-    printf("longjmp(buf, 0) returns 1:    ");
+    printf("longjmp(env, 0) returns 1:    ");
     if (longjmp(env, 0) == 1) {
         printf("PASS\n");
     } else {
@@ -28,7 +28,7 @@ int corruption_check_right = 0;
 }
 
 void longjmp_return_n() {
-    printf("longjmp(buf, n) returns n:    ");
+    printf("longjmp(env, n) returns n:    ");
     if (longjmp(env, 5) == 5) {
         printf("PASS\n");
     } else {
@@ -44,6 +44,19 @@ void longjmp_between_multiple() {
         printf("FAIL\n");
     }
 }*/
+
+int g(int x){
+    return h(x);
+}
+
+int h(int x){
+    if (x == 1){
+        longjmp(env, 0);
+    } else if (x == 2){
+        longjmp(env, 2);
+    }
+    return -2;
+}
 
 int f(int x){
     if (setjmp(env) == 0){
@@ -62,18 +75,9 @@ int f(int x){
     }
 }
 
-int g(int x){
-    return h(x);
-}
 
-int h(int x){
-    if (x == 1){
-        longjmp(env, 0);
-    } else if (x == 2){
-        longjmp(env, 2);
-    }
-    return -2;
-}
+
+
 
 void corruption_check(){
     if (corruption_check_left == corruption_check_right){
@@ -85,7 +89,7 @@ void corruption_check(){
 }
 
 int main(int argc, char *argv[]) {
-	// TODO: Need functions with try/catch blocks and buf to test on
+	// TODO: Need functions with try/catch blocks and env to test on
 	printf("Testing plain setjmp: ");
     f(0);
     printf("Longjmp returns 1: ");
