@@ -27,14 +27,14 @@ void free_value(Value *v);
 void free_lambda(Lambda *f);
 void free_environment(Environment *env);
 
-// TODO: My functions
+/*// TODO: My functions
 void mark_value(Value *v);
 void mark_lambda(Lambda *f);
 void mark_environment(Environment *env);
 void mark_eval_stack(PtrStack *eval_stack);
 void sweep_environment();
 void sweep_lambda();
-void sweep_value();
+void sweep_value();*/
 
 
 /*========================================================*
