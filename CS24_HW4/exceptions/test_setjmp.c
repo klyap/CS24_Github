@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
+#include "c_except.h"
 /* Used to jump back to main() if we get a bad input. */
 int corruption_check_left = 0;
 jmp_buf env;
