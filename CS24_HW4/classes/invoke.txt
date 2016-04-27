@@ -1,4 +1,4 @@
-movl 8(%ebp), %ebx	# (arg to getVolume) Shape data pointer
+movl 8(%ebp), %ebx	# The arg to getVolume is shape data pointer
 movl (%ebx), %ecx	# Dereference to get shape class pointer
 movl (%ecx), %ecx	# Dereference to get getVolume function pointer
 push %ebx			# Push argument to getVolume

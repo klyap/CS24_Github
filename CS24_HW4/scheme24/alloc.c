@@ -231,13 +231,11 @@ void mark_lambda(Lambda *f){
     f->marked = 1;
 
     if (f->native_impl == 0){
-
         mark_value(f->arg_spec);
         mark_value(f->body);
     }
 
-    mark_value((Value *)&(f->func));
-
+    mark_environment(parent_env);
 }
 
 void mark_value(Value *v){
@@ -266,11 +264,17 @@ void mark_environment(Environment *env){
     }*/
     int i = 0;
     assert(env != NULL);
+    if (env->marked == 1){
+        return;
+    }
+
     env->marked = 1;
     printf("--mark_environment: # of num_bindings: %d\n", env->num_bindings);
     for (i = 0; i < env->num_bindings; i++){
         mark_value(env->bindings[i].value);
     }
+
+    mark_environment(env->parent_env);
 }
 
 void mark_eval_stack(PtrStack *eval_stack){
@@ -309,6 +313,7 @@ void mark_eval_stack(PtrStack *eval_stack){
 
 
 void sweep_values(){
+    printf("-- sweep_values: allocated_values size = %s\n", allocated_values.size);
     Value *val;
     for (int i; i < allocated_values.size; i++){
         val = (Value *) pv_get_elem(&allocated_values, i);
@@ -325,6 +330,7 @@ void sweep_values(){
 }
 
 void sweep_lambdas(){
+    printf("-- sweep_lambdas: allocated_lambdas size = %s\n", allocated_lambdas.size);
     Lambda *func;
     for (int i; i < allocated_lambdas.size; i++){
         func = (Lambda *) pv_get_elem(&allocated_lambdas, i);
@@ -342,6 +348,7 @@ void sweep_lambdas(){
 }
 
 void sweep_environments(){
+    printf("-- sweep_environments: allocated_environments size = %s\n", allocated_environments.size);
     Environment *env;
     for (int i; i < allocated_environments.size; i++){
         env = (Environment *) pv_get_elem(&allocated_environments, i);

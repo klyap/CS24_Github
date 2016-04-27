@@ -40,7 +40,7 @@ void static_init() {
 
 /*! Static initialization for the Shape class. */
 void Shape_class_init(Shape_Class *class) {
-    /* TODO */
+    // Set to NULL since this is virtual method
     class->getVolume = NULL;
 }
 
@@ -50,7 +50,6 @@ void Shape_class_init(Shape_Class *class) {
  * function initializes the density of the shape, as well as the class info.
  */
 void Shape_init(Shape_Data *this, Shape_Class *class, float D) {
-    /* TODO */
     Shape_class_init(class);
     this->class = class;
     Shape_setDensity(this, D);
@@ -59,7 +58,6 @@ void Shape_init(Shape_Data *this, Shape_Class *class, float D) {
 
 /*! Sets the density of this shape.  The argument must be nonnegative! */
 void Shape_setDensity(Shape_Data *this, float D) {
-    /* TODO */
     assert(D >= 0);
     this->density = D;
 }
@@ -67,7 +65,8 @@ void Shape_setDensity(Shape_Data *this, float D) {
 
 /*! Returns the mass of this shape, computed from the density and volume. */
 float Shape_getMass(Shape_Data *this) {
-    /* TODO */
+    // Note:
+    // getVolume is defined differently for every class (ie. Box, Cone, etc)
     return this->class->getVolume(this) * this->density;
 }
 
@@ -91,7 +90,6 @@ float Shape_getMass(Shape_Data *this) {
 
 /*! Static initialization for the Box class. */
 void Box_class_init(Box_Class *class) {
-    /* TODO */
     class->getVolume = Box_getVolume;
 }
 
@@ -103,8 +101,9 @@ void Box_class_init(Box_Class *class) {
  */
 void Box_init(Box_Data *this, Box_Class *class,
     float L, float W, float H, float D) {
-    /* TODO */
+    // Initialize base class properties and methods
     Shape_init((Shape_Data *) this, (Shape_Class *) class, D);
+    // Initialize subclass properties and methods
     Box_class_init(class);
     Box_setSize(this, L, W, H);
 }
@@ -115,7 +114,7 @@ void Box_init(Box_Data *this, Box_Class *class,
  * "new Box(L, W, H, D)", performing both heap-allocation and initialization. 
  */
 Box_Data * new_Box(float L, float W, float H, float D) {
-    /* TODO */
+
     Box_Data *new_box = (Box_Data *) malloc(sizeof(Box_Data));
     if (new_box == NULL){
         printf("Error: malloc returned NULL");
@@ -138,7 +137,6 @@ Box_Data * new_Box(float L, float W, float H, float D) {
  * Sets the dimensions of the box.  The arguments are asserted to be positive.
  */
 void Box_setSize(Box_Data *this, float L, float W, float H) {
-    /* TODO */
     assert(L >= 0);
     assert(W >= 0);
     assert(H >= 0);
@@ -153,7 +151,6 @@ void Box_setSize(Box_Data *this, float L, float W, float H) {
  * of Shape::getVolume(), which is abstract (i.e. pure-virtual).
  */
 float Box_getVolume(Box_Data *this) {
-    /* TODO */
     return this->length * this->width * this->height;
 }
 
@@ -165,7 +162,6 @@ float Box_getVolume(Box_Data *this) {
 
 /*! Static initialization for the Sphere class. */
 void Sphere_class_init(Sphere_Class *class) {
-    /* TODO */
     class->getVolume = Sphere_getVolume;
 }
 
@@ -176,11 +172,11 @@ void Sphere_class_init(Sphere_Class *class) {
  * density, and then it initializes its data members with the specified values.
  */
 void Sphere_init(Sphere_Data *this, Sphere_Class *class, float R, float D) {
-    /* TODO */
+    
     Shape_init((Shape_Data *)this,(Shape_Class *) class, D);
     Sphere_class_init(class);
     Sphere_setRadius(this, R);
-    
+
 }
 
 
@@ -189,7 +185,7 @@ void Sphere_init(Sphere_Data *this, Sphere_Class *class, float R, float D) {
  * "new Sphere(R, D)", performing both heap-allocation and initialization. 
  */
 Sphere_Data * new_Sphere(float R, float D) {
-    /* TODO */
+
     Sphere_Data *new_sphere = (Sphere_Data *) malloc(sizeof(Sphere_Data));
     if (new_sphere == NULL){
         printf("Error: malloc returned NULL");
@@ -210,7 +206,7 @@ Sphere_Data * new_Sphere(float R, float D) {
 
 /*! Sets the radius of the sphere.  The argument is asserted to be positive. */
 void Sphere_setRadius(Sphere_Data *this, float R) {
-    /* TODO */
+
     assert(R >= 0);
     this->radius = R;
 }
@@ -221,7 +217,7 @@ void Sphere_setRadius(Sphere_Data *this, float R) {
  * of Shape::getVolume(), which is abstract (i.e. pure-virtual).
  */
 float Sphere_getVolume(Sphere_Data *this) {
-    /* TODO */
+
     return (4/3) * 3.14159 * this->radius * this->radius * this->radius;
 }
 
@@ -233,7 +229,7 @@ float Sphere_getVolume(Sphere_Data *this) {
 
 /*! Static initialization for the Cone class. */
 void Cone_class_init(Cone_Class *class) {
-    /* TODO */
+
     class->getVolume = Cone_getVolume;
 }
 
@@ -244,8 +240,6 @@ void Cone_class_init(Cone_Class *class) {
  * density, and then it initializes its data members with the specified values.
  */
 void Cone_init(Cone_Data *this, Cone_Class *class, float BR, float H, float D) {
-    /* TODO */
-    // Call Shape constructor
     
     Shape_init((Shape_Data *) this, (Shape_Class *) class, D);
     Cone_class_init(class);
@@ -258,7 +252,7 @@ void Cone_init(Cone_Data *this, Cone_Class *class, float BR, float H, float D) {
  * "new Cone(BR, H, D)", performing both heap-allocation and initialization. 
  */
 Cone_Data * new_Cone(float BR, float H, float D) {
-    /* TODO */
+
     Cone_Data *new_cone = (Cone_Data *) malloc(sizeof(Cone_Data));
     if (new_cone == NULL){
         printf("Error: malloc returned NULL");
@@ -281,7 +275,7 @@ Cone_Data * new_Cone(float BR, float H, float D) {
  * Sets the dimensions of the cone.  The arguments are asserted to be positive.
  */
 void Cone_setBaseHeight(Cone_Data *this, float BR, float H) {
-    /* TODO */
+
     assert(BR > 0);
     assert(H > 0);
     this->base_radius = BR;
@@ -294,7 +288,7 @@ void Cone_setBaseHeight(Cone_Data *this, float BR, float H) {
  * of Shape::getVolume(), which is abstract (i.e. pure-virtual).
  */
 float Cone_getVolume(Cone_Data *this) {
-    /* TODO */
+
     return (1.0 / 3.0) * 3.14159 * this->base_radius * this->base_radius
      * this->height;
 }
