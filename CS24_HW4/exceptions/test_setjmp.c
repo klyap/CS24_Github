@@ -69,23 +69,62 @@ int g(int x){
     return h(15 - x);
 }
 
-int f(int x){
-    if (x == 1){
-        longjmp(env, 1);
-    }
-    
+int f(){
+    int x = 1;
+    printf("Testing regular setjmp: \n");
     if (setjmp(env) == 0){
-        printf("Regular setjmp 1\n");
+        //printf("Regular setjmp 1\n");
+        printf("PASS reg setjmp \n");
         return g(3 * x);
     } else {
-        printf("Longjmped back: %d\n", setjmp(env));
+        //printf("Longjmped back: %d\n", setjmp(env));
         return -1;
     }
+}
+
+int jump_across(){
+    int x = 5;
+    printf("Testing jumping across functions: \n");
+    if (setjmp(env) == 0){
+        //printf("Regular setjmp 1\n");
+        return g(3 * x);
+    } else {
+        //printf("Longjmped back: %d\n", setjmp(env));
+        printf("PASS jumping across functions\n");
+        return -1;
+    }
+}
+
+int no_exceptions(){
     
+    printf("Test no exceptions: \n");
+    if (setjmp(env) == 0){
+        printf("PASS\n");
+        return 1;
+    } else {
+        printf("FAIL\n");
+        return -1;
+    }
 
 }
 
-void test_within(double x){
+void jump_within(){
+    printf("Test jump within function: \n");
+    int x = 1;
+
+    if (x == 1){
+        longjmp(env, 1);
+    }
+
+    if (setjmp(env) == 0){
+        printf("FAIL\n");
+    } else {
+        printf("PASS\n");
+    }
+
+}
+
+/*void test_within(double x){
     TRY (
         double n1 = 1;
         double n2 = x;
@@ -99,20 +138,20 @@ void test_within(double x){
         RETHROW;
     )
     END_TRY;
-}
+}*/
 
 
 
 int main(int argc, char *argv[]) {
 	// TODO: Need functions with try/catch blocks and env to test on
-    printf("Test within on DIVIDE_BY_ZERO\n");
-    test_within(0.0);
-    printf("Test within on 1.0\n");
-    test_within(1.0);
-    printf("Test within on 1\n");
-    test_within(1);
-    printf("Test within on char\n");
-    test_within('a');
+    // printf("Test within on DIVIDE_BY_ZERO\n");
+    // test_within(0.0);
+    // printf("Test within on 1.0\n");
+    // test_within(1.0);
+    // printf("Test within on 1\n");
+    // test_within(1);
+    // printf("Test within on char\n");
+    // test_within('a');
 
     int a = f(0);
     printf("Testing plain setjmp: %d", a);
