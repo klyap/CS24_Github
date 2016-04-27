@@ -264,7 +264,7 @@ void mark_environment(Environment *env){
         env = env->parent_env;
     }*/
     int i = 0;
-    //assert(env != NULL);
+    assert(env != NULL);
     if (env->marked == 1){
         return;
     }
@@ -274,8 +274,9 @@ void mark_environment(Environment *env){
     for (i = 0; i < env->num_bindings; i++){
         mark_value(env->bindings[i].value);
     }
-
-    mark_environment(env->parent_env);
+    if (env->parent_env != NULL){
+        mark_environment(env->parent_env);
+    }
 }
 
 void mark_eval_stack(PtrStack *eval_stack){
