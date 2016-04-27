@@ -3,7 +3,8 @@ int my_setjmp(my_jmp_buf buf);
 void my_longjmp(my_jmp_buf buf, int ret);
 */
 
-.globl setjmp	       /* Ignore everything beginning with a "." */
+.globl my_setjmp	       /* Ignore everything beginning with a "." */
+.globl my_longjmp	       /* Ignore everything beginning with a "." */
 .text
 	.align 4
 my_setjmp:
