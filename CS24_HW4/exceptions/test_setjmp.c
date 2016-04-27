@@ -96,7 +96,7 @@ void test_within(double x){
 
 
 
-//int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
 	// TODO: Need functions with try/catch blocks and env to test on
     
     int a = f(0);
@@ -123,6 +123,6 @@ void test_within(double x){
     printf("No corruption: ");
     corruption_check();
 
-    //return 0;
-//}
+    return 0;
+}
 
