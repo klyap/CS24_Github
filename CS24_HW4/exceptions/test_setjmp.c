@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-//#include "c_except.h"
+#include "c_except.h"
 /* Used to jump back to main() if we get a bad input. */
 int corruption_check_left = 0;
 jmp_buf env;
@@ -79,7 +79,7 @@ int f(int x){
 }
 
 void test_within(double x){
-    /*TRY (
+    TRY (
         double n1 = x;
         double n2 = x;
         printf("The quotient of %lg / %lg is: %lg\n", n1, n2, n1/n2);
@@ -91,7 +91,7 @@ void test_within(double x){
         printf("Ack!! You entered 0 for the divisor!\n");
         RETHROW;
     )
-    END_TRY;*/
+    END_TRY;
 }
 
 
@@ -114,12 +114,12 @@ int main(int argc, char *argv[]) {
     //printf("Test within: %d", e);
 	test_within('a');*/
 
-    /*printf("Testing plain setjmp: ");
+    printf("Testing plain setjmp: ");
     test3(0);
     printf("Longjmp returns 1: ");
     test3(1);
     printf("Longjmp returns n / jumps multiple functions: ");
-    test3(2);*/
+    test3(2);
     printf("No corruption: ");
     corruption_check();
 
