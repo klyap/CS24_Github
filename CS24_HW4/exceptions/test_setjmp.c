@@ -107,8 +107,7 @@ int jump_across(){
         printf("FAIL\n");
         return -1;
     }
-*/
-}
+}*/
 
 void jump_within(){
     printf("Test jump within function: \n");
