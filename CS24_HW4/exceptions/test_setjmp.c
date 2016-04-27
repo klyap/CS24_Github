@@ -65,6 +65,7 @@ int h(int x){
 }
 
 int g(int x){
+
     return h(15 - x);
 }
 
@@ -76,6 +77,10 @@ int f(int x){
         printf("Longjmped back: %d\n", setjmp(env));
         return -1;
     }
+    if (x == 1){
+        longjmp(env, 1);
+    }
+
 }
 
 void test_within(double x){
@@ -106,13 +111,15 @@ int main(int argc, char *argv[]) {
     test_within(1);
     printf("Test within on char\n");
     test_within('a');
-    
+
     int a = f(0);
     printf("Testing plain setjmp: %d", a);
     int b = f(5);
     printf("Longjmp returns 1: %d", b);
     int c = f(2);
     printf("Longjmp returns n / jumps multiple functions: %d", c);
+    int d = f(1);
+    printf("Longjmp within function: %d", d);
 
     
 
