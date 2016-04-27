@@ -264,7 +264,7 @@ void mark_environment(Environment *env){
         env = env->parent_env;
     }*/
     int i = 0;
-    assert(env != NULL);
+    //assert(env != NULL);
     if (env->marked == 1){
         return;
     }
