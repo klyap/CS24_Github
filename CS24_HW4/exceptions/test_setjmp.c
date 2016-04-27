@@ -113,11 +113,10 @@ void jump_within(){
     printf("Test jump within function: \n");
     int x = 1;
 
-    if (x == 1){
-        longjmp(env, 1);
-    }
-
     if (setjmp(env) == 0){
+        if (x == 1){
+            longjmp(env, 1);
+        }
         printf("FAIL\n");
     } else {
         printf("PASS\n");
