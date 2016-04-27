@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "c_except.h"
+//#include "c_except.h"
 /* Used to jump back to main() if we get a bad input. */
 int corruption_check_left = 0;
 jmp_buf env;
@@ -113,7 +113,7 @@ int main(int argc, char *argv[]) {
     test_within(1);
     //printf("Test within: %d", e);
 	test_within('a');*/
-    
+
     /*printf("Testing plain setjmp: ");
     test3(0);
     printf("Longjmp returns 1: ");
