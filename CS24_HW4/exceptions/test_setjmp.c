@@ -1,6 +1,7 @@
 #include <setjmp.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 /* Used to jump back to main() if we get a bad input. */
 int corruption_check_left = 0;
@@ -46,42 +47,6 @@ void longjmp_between_multiple() {
 }*/
 
 
-int h(int x){
-    if (x == 1){
-        longjmp(env, 0);
-    } else if (x == 2){
-        longjmp(env, 2);
-    }
-    return -2;
-}
-
-int g(int x){
-    return h(x);
-}
-
-
-int f(int x){
-    if (setjmp(env) == 0){
-        printf("Regular setjmp\n");
-        return g(x);
-        printf("Regular setjmp\n");
-    } else if (setjmp(env) == 1){
-        printf("Returned 1 \n");
-        return -1;
-    } else if (setjmp(env) == 2) {
-        // Chose n = 2
-        printf("Returned n\n");
-        return -1;
-    } else {
-        printf("FAIL: %d\n", setjmp(env));
-        return -1;
-    }
-}
-
-
-
-
-
 void corruption_check(){
     if (corruption_check_left == corruption_check_right){
         printf("PASS\n");
@@ -91,14 +56,62 @@ void corruption_check(){
 
 }
 
+
+int f(int x){
+    if (x == 1){
+        longjmp(env, 0);
+    } else if (x == 2){
+        longjmp(env, 2);
+    }
+    return -2;
+}
+
+int test2(int x){
+    return test1(x);
+}
+
+
+int f(int x){
+    if (setjmp(env) == 0){
+        printf("Regular setjmp 1\n");
+        return g(3 * x);
+        printf("Regular setjmp 2\n");
+    } else {
+        printf("Longjmped back: %d\n", setjmp(env));
+        return -1;
+    }
+}
+
+int g(int x){
+    return h(15 - x);
+}
+
+int h(int x){
+    if (x < 5){
+        longjmp(env, 1);
+    }
+
+    return sqrtl(x-5);
+}
+
+
+
+
 int main(int argc, char *argv[]) {
 	// TODO: Need functions with try/catch blocks and env to test on
-	printf("Testing plain setjmp: ");
+    printf("Testing plain setjmp: ");
     f(0);
     printf("Longjmp returns 1: ");
-    f(1);
+    f(5);
     printf("Longjmp returns n / jumps multiple functions: ");
     f(2);
+
+	/*printf("Testing plain setjmp: ");
+    test3(0);
+    printf("Longjmp returns 1: ");
+    test3(1);
+    printf("Longjmp returns n / jumps multiple functions: ");
+    test3(2);*/
     printf("No corruption: ");
     corruption_check();
 
