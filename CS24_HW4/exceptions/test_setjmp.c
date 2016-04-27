@@ -56,20 +56,17 @@ void corruption_check(){
 
 }
 
-
-int f(int x){
-    if (x == 1){
-        longjmp(env, 0);
-    } else if (x == 2){
-        longjmp(env, 2);
+int h(int x){
+    if (x < 5){
+        longjmp(env, 1);
     }
-    return -2;
+
+    return sqrtl(x-5);
 }
 
-int test2(int x){
-    return test1(x);
+int g(int x){
+    return h(15 - x);
 }
-
 
 int f(int x){
     if (setjmp(env) == 0){
@@ -82,17 +79,9 @@ int f(int x){
     }
 }
 
-int g(int x){
-    return h(15 - x);
-}
 
-int h(int x){
-    if (x < 5){
-        longjmp(env, 1);
-    }
 
-    return sqrtl(x-5);
-}
+
 
 
 
