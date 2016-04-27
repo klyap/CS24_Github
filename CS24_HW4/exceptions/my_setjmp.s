@@ -1,6 +1,16 @@
-/* Arguments and where they are stored 
+/*
 int my_setjmp(my_jmp_buf buf);
-void my_longjmp(my_jmp_buf buf, int ret);
+8(%ebp): my_jmp_buf buf
+4(%ebp): return address
+These instructions store the appropriate registers in "buf"
+and returns 0.
+
+int my_longjmp(my_jmp_buf buf, int ret);
+12(%ebp): int ret
+8(%ebp): my_jmp_buf buf
+4(%ebp): return address
+These instructions restore the appropriate registers in "buf"
+and returns the second argument.
 */
 
 .globl my_setjmp	       /* Ignore everything beginning with a "." */
