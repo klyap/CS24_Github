@@ -45,9 +45,6 @@ void longjmp_between_multiple() {
     }
 }*/
 
-int g(int x){
-    return h(x);
-}
 
 int h(int x){
     if (x == 1){
@@ -57,6 +54,11 @@ int h(int x){
     }
     return -2;
 }
+
+int g(int x){
+    return h(x);
+}
+
 
 int f(int x){
     if (setjmp(env) == 0){
