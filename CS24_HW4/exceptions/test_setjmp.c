@@ -50,9 +50,9 @@ void longjmp_between_multiple() {
 void corruption_check(){
     printf("Testing jmp_buf is uncorrupted: \n");
     if (corruption_check_left == corruption_check_right){
-        printf("PASS\n");
+        printf("PASS: Testing jmp_buf is uncorrupted\n");
     } else {
-        printf("FAIL\n");
+        printf("FAIL: Testing jmp_buf is uncorrupted\n");
     }
 
 }
