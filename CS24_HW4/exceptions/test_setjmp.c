@@ -79,7 +79,19 @@ int f(int x){
 }
 
 int test_within(int x){
-     return 1;
+    TRY (
+        n1 = x;
+        n2 = x;
+        //printf("The quotient of %lg / %lg is: %lg\n", n1, n2, divide(n1, n2));
+    )
+    CATCH (NUMBER_PARSE_ERROR,
+        printf("Ack!! I couldn't parse what you entered!\n");
+    )
+    CATCH (DIVIDE_BY_ZERO,
+        printf("Ack!! You entered 0 for the divisor!\n");
+        RETHROW;
+    )
+    END_TRY;
 }
 
 
@@ -94,6 +106,10 @@ int main(int argc, char *argv[]) {
     int c = f(2);
     printf("Longjmp returns n / jumps multiple functions: %d", c);
 
+    int d = test_within(0);
+    printf("Test within on DIVIDE_BY_ZERO: %d", d);
+    int e = test_within(1);
+    printf("Test within: %d", e);
 	/*printf("Testing plain setjmp: ");
     test3(0);
     printf("Longjmp returns 1: ");
