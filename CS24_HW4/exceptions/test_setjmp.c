@@ -80,9 +80,9 @@ int f(int x){
 
 int test_within(int x){
     TRY (
-        n1 = x;
-        n2 = x;
-        //printf("The quotient of %lg / %lg is: %lg\n", n1, n2, divide(n1, n2));
+        int n1 = x;
+        int n2 = x;
+        printf("The quotient of %lg / %lg is: %lg\n", n1, n2, n1/n2);
     )
     CATCH (NUMBER_PARSE_ERROR,
         printf("Ack!! I couldn't parse what you entered!\n");
