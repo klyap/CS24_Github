@@ -236,7 +236,7 @@ void mark_lambda(Lambda *f){
         mark_value(f->body);
     }
 
-    mark_environment(parent_env);
+    mark_environment(f->parent_env);
 }
 
 void mark_value(Value *v){
