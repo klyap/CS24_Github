@@ -79,7 +79,7 @@ int f(int x){
 }
 
 void test_within(double x){
-    TRY (
+    /*TRY (
         double n1 = x;
         double n2 = x;
         printf("The quotient of %lg / %lg is: %lg\n", n1, n2, n1/n2);
@@ -91,7 +91,7 @@ void test_within(double x){
         printf("Ack!! You entered 0 for the divisor!\n");
         RETHROW;
     )
-    END_TRY;
+    END_TRY;*/
 }
 
 
