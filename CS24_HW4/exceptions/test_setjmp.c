@@ -61,7 +61,7 @@ int h(int x){
         longjmp(env, 1);
     }
 
-    return sqrtl(x-5);
+    return sqrt(x-5);
 }
 
 int g(int x){
@@ -78,11 +78,6 @@ int f(int x){
         return -1;
     }
 }
-
-
-
-
-
 
 
 
