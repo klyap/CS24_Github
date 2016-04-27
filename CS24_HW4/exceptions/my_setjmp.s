@@ -9,7 +9,7 @@ void my_longjmp(my_jmp_buf buf, int ret);
 	.align 4
 my_setjmp:
 	pushl %ebp         	/* Push old base pointer. */
-	movl %esp,%ebp	   	/* Current stack is new base. */
+	movl %esp, %ebp	   	/* Current stack is new base. */
 	movl 8(%ebp), %ecx	/* Store jmp_buf. */
 	movl %esp, (%ecx)	/* Move to jmp_buf (and push stack pointer) */
 	movl %ebx, 4(%ecx)  /* Push callee save registers. */
@@ -19,10 +19,8 @@ my_setjmp:
 	movl %edx, 16(%ecx) /* Push return address. */
 	movl (%ebp), %edx	/* Temp storage for caller return address */
 	movl %edx, 20(%ecx) /* Push base pointer */
-
-	/*movl %esp, 16(%ecx)         Push stack frame. */
 	
-	xor %eax, %eax		/* Set %eax to 0
+	xor %eax, %eax		/* Set %eax to 0 */
 
 	popl %ebp           /* Pop old base of frame. */
 	ret 				/* Return */

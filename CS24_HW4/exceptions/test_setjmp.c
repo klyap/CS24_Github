@@ -98,6 +98,14 @@ void test_within(double x){
 
 int main(int argc, char *argv[]) {
 	// TODO: Need functions with try/catch blocks and env to test on
+    printf("Test within on DIVIDE_BY_ZERO\n");
+    test_within(0.0);
+    printf("Test within on 1.0\n");
+    test_within(1.0);
+    printf("Test within on 1\n");
+    test_within(1);
+    printf("Test within on char\n");
+    test_within('a');
     
     int a = f(0);
     printf("Testing plain setjmp: %d", a);
@@ -106,14 +114,7 @@ int main(int argc, char *argv[]) {
     int c = f(2);
     printf("Longjmp returns n / jumps multiple functions: %d", c);
 
-    printf("Test within on DIVIDE_BY_ZERO\n");
-    test_within(0.0);
-    printf("Test within on 1.0\n");
-    test_within(1.0);
-    printf("Test within on 1\n");
-    test_within(1);
-    printf("Test within on char\n");
-	test_within('a');
+    
 
     /*printf("Testing plain setjmp: ");
     test3(0);
