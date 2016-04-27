@@ -1,5 +1,5 @@
 OBJS = c_except.o my_setjmp.o ptr_vector.o divider.o test_setjmp.o
-
+OBS2 = c_except.o my_setjmp.o ptr_vector.o test_setjmp.o
 CC = gcc
 CFLAGS=-g -Wall -Werror
 ASFLAGS=-g
@@ -21,7 +21,7 @@ divider.c : c_except.h my_setjmp.h
 test_setjmp.c : c_except.h my_setjmp.h #build test_setjmp
 
 # TODO: check rule
-check : $(OBJS)
+check : $(OBS2)
 	$(CC) $(LDFLAGS) $^ -o test_setjmp
 	
 

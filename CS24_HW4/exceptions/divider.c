@@ -27,7 +27,7 @@ double divide(double a, double b) {
 }
 
 
-int main(int argc, char *argv[]) {
+int main() {
     double n1, n2;
 
     printf("Tell me two numbers, and I will tell you their quotient!\n");
