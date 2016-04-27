@@ -168,7 +168,7 @@ int main(int argc, char *argv[]) {
     jump_across();
     no_exceptions();
     jump_within();
-    
+    corruption_check();
 
     /*printf("Testing plain setjmp: ");
     test3(0);
