@@ -72,7 +72,6 @@ int f(int x){
     if (setjmp(env) == 0){
         printf("Regular setjmp 1\n");
         return g(3 * x);
-        printf("Regular setjmp 2\n");
     } else {
         printf("Longjmped back: %d\n", setjmp(env));
         return -1;
