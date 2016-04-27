@@ -313,7 +313,7 @@ void mark_eval_stack(PtrStack *eval_stack){
 
 
 void sweep_values(){
-    printf("-- sweep_values: allocated_values size = %s\n", allocated_values.size);
+    printf("-- sweep_values: allocated_values size = %d\n", allocated_values.size);
     Value *val;
     for (int i; i < allocated_values.size; i++){
         val = (Value *) pv_get_elem(&allocated_values, i);
@@ -330,7 +330,7 @@ void sweep_values(){
 }
 
 void sweep_lambdas(){
-    printf("-- sweep_lambdas: allocated_lambdas size = %s\n", allocated_lambdas.size);
+    printf("-- sweep_lambdas: allocated_lambdas size = %d\n", allocated_lambdas.size);
     Lambda *func;
     for (int i; i < allocated_lambdas.size; i++){
         func = (Lambda *) pv_get_elem(&allocated_lambdas, i);
@@ -348,7 +348,7 @@ void sweep_lambdas(){
 }
 
 void sweep_environments(){
-    printf("-- sweep_environments: allocated_environments size = %s\n", allocated_environments.size);
+    printf("-- sweep_environments: allocated_environments size = %d\n", allocated_environments.size);
     Environment *env;
     for (int i; i < allocated_environments.size; i++){
         env = (Environment *) pv_get_elem(&allocated_environments, i);
