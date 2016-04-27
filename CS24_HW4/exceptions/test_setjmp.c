@@ -48,6 +48,7 @@ void longjmp_between_multiple() {
 
 
 void corruption_check(){
+    printf("Testing jmp_buf is uncorrupted: \n");
     if (corruption_check_left == corruption_check_right){
         printf("PASS\n");
     } else {
@@ -61,6 +62,7 @@ int h(int x){
         longjmp(env, 1);
     }
 
+    printf("PASS\n");
     return x-5;
 }
 
@@ -69,15 +71,15 @@ int g(int x){
     return h(15 - x);
 }
 
-int f(){
+int no_exceptions(){
     int x = 1;
-    printf("Testing regular setjmp: \n");
+    printf("Testing regular setjmp with no exceptions thrown: \n");
     if (setjmp(env) == 0){
         //printf("Regular setjmp 1\n");
-        printf("PASS reg setjmp \n");
         return g(3 * x);
     } else {
         //printf("Longjmped back: %d\n", setjmp(env));
+        printf("FAIL\n");
         return -1;
     }
 }
@@ -90,12 +92,12 @@ int jump_across(){
         return g(3 * x);
     } else {
         //printf("Longjmped back: %d\n", setjmp(env));
-        printf("PASS jumping across functions\n");
+        printf("PASS\n");
         return -1;
     }
 }
 
-int no_exceptions(){
+/*int no_exceptions(){
     
     printf("Test no exceptions: \n");
     if (setjmp(env) == 0){
@@ -105,7 +107,7 @@ int no_exceptions(){
         printf("FAIL\n");
         return -1;
     }
-
+*/
 }
 
 void jump_within(){
@@ -153,16 +155,16 @@ int main(int argc, char *argv[]) {
     // printf("Test within on char\n");
     // test_within('a');
 
-    int a = f(0);
+    /*int a = f(0);
     printf("Testing plain setjmp: %d", a);
     int b = f(5);
     printf("Longjmp returns 1: %d", b);
     int c = f(2);
-    printf("Longjmp returns n / jumps multiple functions: %d", c);
+    printf("Longjmp returns n / jumps multiple functions: %d", c);*/
     
-    printf("/n/n/n/n");
+    /*printf("/n/n/n/n");
     int d = f(1);
-    printf("Longjmp within function: %d", d);
+    printf("Longjmp within function: %d", d);*/
 
     jump_across();
     no_exceptions();
