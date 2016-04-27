@@ -1,4 +1,4 @@
-OBJS = c_except.o my_setjmp.o ptr_vector.o divider.o
+OBJS = c_except.o my_setjmp.o ptr_vector.o divider.o test_setjmp.o
 
 CC = gcc
 CFLAGS=-g -Wall -Werror
@@ -21,8 +21,9 @@ divider.c : c_except.h my_setjmp.h
 test_setjmp.c : c_except.h my_setjmp.h #build test_setjmp
 
 # TODO: check rule
-check :
-	./test_setjump
+check : $(OBJS)
+	$(CC) $(LDFLAGS) $^ -o test_setjmp
+	
 
 clean :
 	rm -f *.o *~ divider divider.exe

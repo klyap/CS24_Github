@@ -315,17 +315,17 @@ void mark_eval_stack(PtrStack *eval_stack){
 
 
 void sweep_values(){
-    printf("-- sweep_values: allocated_values size = %d\n", allocated_values.size);
+    //printf("-- sweep_values: allocated_values size = %d\n", allocated_values.size);
     Value *val;
     int i;
     for (i = 0; i < allocated_values.size; i++){
-        printf("-- sweep_values: checking element %d\n", i);
+        //printf("-- sweep_values: checking element %d\n", i);
         val = (Value *) pv_get_elem(&allocated_values, i);
         if (val->marked == 1){
-            printf("-- sweep_values: unmarking\n");
+            //printf("-- sweep_values: unmarking\n");
             val->marked = 0;
         } else {
-            printf("-- sweep_values: freeing\n");
+            //printf("-- sweep_values: freeing\n");
             free_value(val);
             pv_set_elem(&allocated_values, i, NULL);
         }
