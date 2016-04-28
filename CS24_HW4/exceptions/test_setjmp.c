@@ -70,18 +70,13 @@ void jump_within(){
 }
 
 int jump_return_n(){
-    int x = 1;
     printf("Test jump return n: \n");
 
     if (setjmp(env) == 0){
         longjmp(env, 2);
-    } else if (setjmp(env) != 1) {
-        printf("PASS: Test jump return n\n");
     }
 
-    printf("FAIL: Test jump return n\n");
-    return x;
-
+    return (int setjmp(env));
 }
 
 int main(int argc, char *argv[]) {
