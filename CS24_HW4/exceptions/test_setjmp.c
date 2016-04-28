@@ -3,10 +3,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include "c_except.h"
+
 /* Used to jump back to main() if we get a bad input. */
-int corruption_check_left = 0;
 jmp_buf env;
-int corruption_check_right = 0;
 
 /*
 Helper functions that long jumps back if x < 5 without returning.
@@ -96,25 +95,12 @@ int jump_return_n(){
 }
 
 /* Tests whether the jump buffer was corrupted by checking
- whether the two local variables on either side of it
+ whether the local variables on either side of it
  are still what I had defined them to be initially.
 */
-/*void corruption_check_OG(){
-    printf("Testing jmp_buf is uncorrupted: \n");
-    if (corruption_check_left == corruption_check_right){
-        printf("    PASS: Testing jmp_buf is uncorrupted\n");
-    } else {
-        printf("    FAIL: Testing jmp_buf is uncorrupted\n");
-    }
-}*/
-
 int corruption_check(){
     printf("Testing jmp_buf is uncorrupted: \n");
-    if (corruption_check_left == corruption_check_right){
-        printf("    PASS: Testing jmp_buf is uncorrupted\n");
-    } else {
-        printf("    FAIL: Testing jmp_buf is uncorrupted\n");
-    }
+
     int a = 0;
     int b = 0;
     int c = 0;
@@ -129,15 +115,16 @@ int corruption_check(){
         }
     }
 
-    if (a * b * c * d * e * f == 0){
-        printf("    PASS: Test jump within function\n");
+    if (a + b + c + d + e + f == 0){
+        printf("    PASS: Testing jmp_buf is uncorrupted\n");
     }
     else{
-        printf("    FAIL: Test jump within function\n");
+        printf("    FAIL: Testing jmp_buf is uncorrupted\n");
     }
     
     return curr_env;
 }
+
 
 int main(int argc, char *argv[]) {
     // Test 1
@@ -149,10 +136,9 @@ int main(int argc, char *argv[]) {
     // Test 3
     jump_within();
     // Test 4
-    corruption_check();
-    // Test 5
     jump_return_n();
-
+    // Test 5
+    corruption_check();
 
     return 0;
 }
