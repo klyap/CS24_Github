@@ -75,7 +75,7 @@ int jump_return_n(){
 
     if (setjmp(env) == 0){
         longjmp(env, 2);
-    else if (setjmp(env) != 1) {
+    } else if (setjmp(env) != 1) {
         printf("PASS: Test jump return n\n");
     }
 
