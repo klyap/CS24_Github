@@ -28,5 +28,5 @@ check : $(OBS2)
 	
 
 clean :
-	rm -f *.o *~ divider divider.exe
+	rm -f *.o *~ divider divider.exe my_setjmp my_setjmp.exe
 
