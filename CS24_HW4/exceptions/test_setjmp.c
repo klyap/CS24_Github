@@ -71,12 +71,13 @@ void jump_within(){
 
 int jump_return_n(){
     printf("Test jump return n: \n");
-
-    if (setjmp(env) == 0){
+    
+    int curr_env = setjmp(env);
+    if (curr_env == 0){
         longjmp(env, 2);
     }
 
-    return (int) setjmp(env);
+    return curr_env;
 }
 
 int main(int argc, char *argv[]) {
