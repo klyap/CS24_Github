@@ -76,7 +76,7 @@ int jump_return_n(){
         longjmp(env, 2);
     }
 
-    return (int setjmp(env));
+    return (int) setjmp(env);
 }
 
 int main(int argc, char *argv[]) {
@@ -91,7 +91,11 @@ int main(int argc, char *argv[]) {
     // Test 4
     corruption_check();
     // Test 5
-    jump_return_n();
+    if (jump_return_n() == 2){
+        printf("    PASS: Test jump within function\n");
+    } else {
+        printf("    FAIL: Test jump within function\n");
+    }
 
     return 0;
 }
