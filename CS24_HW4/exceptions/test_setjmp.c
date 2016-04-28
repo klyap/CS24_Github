@@ -88,10 +88,10 @@ int jump_return_n(){
     if (curr_env == 0){
         longjmp(env, 2);
     } else if (curr_env == 2){
-        printf("    PASS: Test jump within function\n");
+        printf("    PASS: Test jump return n\n");
         return curr_env;
     }
-    printf("    FAIL: Test jump within function\n");
+    printf("    FAIL: Test jump return n\n");
     return curr_env;
 }
 
@@ -99,14 +99,44 @@ int jump_return_n(){
  whether the two local variables on either side of it
  are still what I had defined them to be initially.
 */
-void corruption_check(){
+/*void corruption_check_OG(){
     printf("Testing jmp_buf is uncorrupted: \n");
     if (corruption_check_left == corruption_check_right){
         printf("    PASS: Testing jmp_buf is uncorrupted\n");
     } else {
         printf("    FAIL: Testing jmp_buf is uncorrupted\n");
     }
+}*/
 
+int corruption_check(){
+    printf("Testing jmp_buf is uncorrupted: \n");
+    if (corruption_check_left == corruption_check_right){
+        printf("    PASS: Testing jmp_buf is uncorrupted\n");
+    } else {
+        printf("    FAIL: Testing jmp_buf is uncorrupted\n");
+    }
+    int a = 0;
+    int b = 0;
+    int c = 0;
+    int curr_env = setjmp(env);
+    int d = 0;
+    int e = 0;
+    int f = 0;
+    
+    if (setjmp(env) == 0){
+        if (a != 0){
+            longjmp(env, 1);
+        }
+    }
+
+    if (a * b * c * d * e * f == 0){
+        printf("    PASS: Test jump within function\n");
+    }
+    else{
+        printf("    FAIL: Test jump within function\n");
+    }
+    
+    return curr_env;
 }
 
 int main(int argc, char *argv[]) {
