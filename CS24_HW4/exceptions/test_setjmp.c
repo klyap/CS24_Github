@@ -80,7 +80,7 @@ int jump_return_n(){
     }
 
     printf("FAIL: Test jump return n\n");
-    return -1;
+    return x;
 
 }
 
