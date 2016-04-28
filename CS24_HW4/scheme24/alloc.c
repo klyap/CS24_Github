@@ -27,20 +27,6 @@ void free_value(Value *v);
 void free_lambda(Lambda *f);
 void free_environment(Environment *env);
 
-/*// TODO: My functions
-void mark_value(Value *v);
-void mark_lambda(Lambda *f);
-void mark_environment(Environment *env);
-void mark_eval_stack(PtrStack *eval_stack);
-void sweep_environment();
-void sweep_lambda();
-void sweep_value();*/
-
-
-/*========================================================*
- * TODO:  Declarations of your functions might go here... *
- *========================================================*/
-
 
 /*!
  * A growable vector of pointers to all Value structs that are currently
@@ -224,12 +210,17 @@ void free_environment(Environment *env) {
     free(env);
 }
 
-////// TODO /////////
+// Declaring functions that I need to call before they are defined
 void mark_value(Value *v);
 void mark_environment(Environment *env);
 
+/*
+mark_lambda(Lambda *f) marks a lambda and it's parent environment
+and if it's not a native implemented one, this also marks the 
+arg_spec and body members.
+*/
 void mark_lambda(Lambda *f){
-    printf("--mark_lambda");
+
     f->marked = 1;
 
     if (f->native_impl == 0){
@@ -240,6 +231,10 @@ void mark_lambda(Lambda *f){
     mark_environment(f->parent_env);
 }
 
+/*
+mark_value(Value *v) marks a value and if it has extra members 
+(ie. if it's a cons pair or lambda), this also takes care of that too. 
+*/
 void mark_value(Value *v){
     while(v->marked == 0){
         v->marked = 1;
@@ -253,25 +248,23 @@ void mark_value(Value *v){
     
 }
 
+/*
+mark_environment(Environment *env) marks an environment and also its
+members (ie. each value in its bindings and it's parent environment).
+
+Note that marking the environment parent results in a recursive call.
+*/
 void mark_environment(Environment *env){
-    // Find non-NULL parent environments
-    // try assert?
-    /*while(env != NULL && env->marked == 0){
-        int i = 0;
-        env->marked = 1;
-        for (i = 0; i < env->num_bindings; i++){
-            mark_value(env->bindings[i].value);
-        }
-        env = env->parent_env;
-    }*/
+
     int i = 0;
-    assert(env != NULL);
+
+    // Recursive base case
     if (env->marked == 1){
         return;
     }
 
     env->marked = 1;
-    //printf("--mark_environment: # of num_bindings: %d\n", env->num_bindings);
+    
     for (i = 0; i < env->num_bindings; i++){
         mark_value(env->bindings[i].value);
     }
@@ -280,6 +273,15 @@ void mark_environment(Environment *env){
     }
 }
 
+/*
+mark_eval_stack(PtrStack *eval_stack) marks all elements in the
+evaluation stack. Each element is an evaluation context, which has
+the following members that should be marked if they are defined:
+current_env, expression, and child_eval_result.
+
+Note that ptr_vectors should be iterated through with
+pv_get_elem(eval_stack, i).
+*/
 void mark_eval_stack(PtrStack *eval_stack){
 
     int i = 0;
@@ -287,24 +289,18 @@ void mark_eval_stack(PtrStack *eval_stack){
         EvaluationContext *ev_ctx = (EvaluationContext *) pv_get_elem(eval_stack, i);
         
         if (ev_ctx->current_env != NULL){
-            //printf("-- mark_eval_stack: Marking current_evn\n");
             mark_environment(ev_ctx->current_env);
         }
 
         if (ev_ctx->expression != NULL){
-            //printf("-- mark_eval_stack: Marking expression\n");
             mark_value(ev_ctx->expression);
         }
 
         if (ev_ctx->child_eval_result != NULL){
-            //printf("-- mark_eval_stack: Marking child_eval_result\n");
             mark_value(ev_ctx->child_eval_result);
         }
 
         int j = 0;
-        //printf("%p", &ev_ctx->local_vals.size);
-        //printf("-- mark_eval_stack: local values of eval stack: %d\n", *(&ev_ctx->local_vals.size));
-
         for (j = 0; j < *(&ev_ctx->local_vals.size); j++){
             Value **ppv = (Value **) pv_get_elem(&ev_ctx->local_vals, j);
             if (*ppv != NULL){
@@ -314,35 +310,49 @@ void mark_eval_stack(PtrStack *eval_stack){
     }
 }
 
+/*
+sweep_values() frees each element in allocated_values if it's not marked
+and also sets the value in that part of the array to NULL.
+pv_compact() removes the NULLs at the end.
+If the element is marked, unmark it.
 
+Note that ptr_vectors should be iterated through with
+pv_get_elem(eval_stack, i).
+*/
 void sweep_values(){
-    //printf("-- sweep_values: allocated_values size = %d\n", allocated_values.size);
     Value *val;
     int i;
     for (i = 0; i < allocated_values.size; i++){
-        //printf("-- sweep_values: checking element %d\n", i);
+        
         val = (Value *) pv_get_elem(&allocated_values, i);
+        
         if (val->marked == 1){
-            //printf("-- sweep_values: unmarking\n");
             val->marked = 0;
         } else {
-            //printf("-- sweep_values: freeing\n");
             free_value(val);
             pv_set_elem(&allocated_values, i, NULL);
         }
     }
+
     pv_compact(&allocated_values);
 }
 
+/*
+sweep_lambdas() frees each element in allocated_lambdas if it's not marked
+and also sets the value in that part of the array to NULL.
+pv_compact() removes the NULLs at the end.
+If the element is marked, unmark it.
+
+Note that ptr_vectors should be iterated through with
+pv_get_elem(eval_stack, i).
+*/
 void sweep_lambdas(){
-    //printf("-- sweep_lambdas: allocated_lambdas size = %d\n", allocated_lambdas.size);
     Lambda *func;
     int i;
     for (i = 0; i < allocated_lambdas.size; i++){
-        //printf("-- sweep_lambdas: checking element %d\n", i);
+        
         func = (Lambda *) pv_get_elem(&allocated_lambdas, i);
         if (func->marked == 1){
-            //printf("-- sweep_lambdas: unmarking\n");
             func->marked = 0;
         } else {
             printf("-- sweep_lambdas: freeing\n");
@@ -354,18 +364,23 @@ void sweep_lambdas(){
     
 }
 
+/*
+sweep_environment() frees each element in allocated_environments 
+if it's not marked and also sets the value in that part of the array to NULL.
+If the element is marked, unmark it. 
+pv_compact() removes the NULLs at the end.
+
+Note that ptr_vectors should be iterated through with
+pv_get_elem(eval_stack, i).
+*/
 void sweep_environments(){
-    //printf("-- sweep_environments: allocated_environments size = %d\n", allocated_environments.size);
     Environment *env;
     int i;
     for (i = 0; i < allocated_environments.size; i++){
-        //printf("-- sweep_environments: checking element %d\n", i);
         env = (Environment *) pv_get_elem(&allocated_environments, i);
         if (env->marked == 1){
-            //printf("-- sweep_environments: unmarking\n");
             env->marked = 0;
         } else {
-            //printf("-- sweep_environments: freeing\n");
             free_environment(env);
             pv_set_elem(&allocated_environments, i, NULL);
         }
@@ -399,22 +414,13 @@ void collect_garbage() {
         return;
 #endif
 
-    /*==========================================================*
-     * TODO:  Implement mark-and-sweep garbage collection here! *
-     *                                                          *
-     * Mark all objects referenceable from either the global    *
-     * environment, or from the evaluation stack.  Then sweep   *
-     * through all allocated objects, freeing unmarked objects. *
-     *==========================================================*/
-
     global_env = get_global_environment();
     eval_stack = get_eval_stack();
 
-    /* ... TODO ... */
-    //printf("---------MARKING--------\n");
+    // Marking
     mark_environment(global_env);
     mark_eval_stack(eval_stack);
-    //printf("---------SWEEPING--------\n");
+    // Sweeping
     sweep_environments();
     sweep_lambdas();
     sweep_values();
