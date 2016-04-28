@@ -78,7 +78,7 @@ void jump_return_n(){
             longjmp(env, 2);
         }
         printf("    FAIL: Test jump return n\n");
-    } else if (setjmp(env) == 1) {
+    } else if (setjmp(env) == 0) {
         printf("    PASS: Test jump return n\n");
     } else {
         printf("    FAIL: Test jump return n\n");
