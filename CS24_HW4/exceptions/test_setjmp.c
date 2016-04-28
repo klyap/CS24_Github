@@ -69,20 +69,18 @@ void jump_within(){
 
 }
 
-void jump_return_n(){
+int jump_return_n(){
     int x = 1;
     printf("Test jump return n: \n");
 
     if (setjmp(env) == 0){
-        if (x == 1){
-            longjmp(env, 2);
-        }
-        printf("    FAIL: Test jump return n\n");
-    } else if (setjmp(env) == 0) {
-        printf("    PASS: Test jump return n\n");
-    } else {
-        printf("    FAIL: Test jump return n\n");
+        longjmp(env, 2);
+    else if (setjmp(env) != 1) {
+        printf("PASS: Test jump return n\n");
     }
+
+    printf("FAIL: Test jump return n\n");
+    return -1;
 
 }
 
