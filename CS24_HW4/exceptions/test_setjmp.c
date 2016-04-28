@@ -69,6 +69,23 @@ void jump_within(){
 
 }
 
+void jump_return_n(){
+    int x = 1;
+    printf("Test jump return n: \n");
+
+    if (setjmp(env) == 0){
+        if (x == 1){
+            longjmp(env, 2);
+        }
+        printf("    FAIL: Test jump return n\n");
+    } else if (setjmp(env) == 2) {
+        printf("    PASS: Test jump return n\n");
+    } else {
+        printf("    FAIL: Test jump return n\n");
+    }
+
+}
+
 int main(int argc, char *argv[]) {
     // Test 1
     if (jump_across() != -1){
@@ -80,6 +97,8 @@ int main(int argc, char *argv[]) {
     jump_within();
     // Test 4
     corruption_check();
+    // Test 5
+    jump_return_n();
 
     return 0;
 }
