@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
     no_exceptions();
     // Test 3
     jump_within();
-    // Test 3
+    // Test 4
     corruption_check();
 
     return 0;
