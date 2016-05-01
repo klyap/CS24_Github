@@ -100,7 +100,6 @@ void clock_arbiter(BusArbiter *arb) {
 
     if (GrantB + GrantA == 0){
         NextTurn = ~CurrentTurn;
-        printf("%d", NextTurn);
     }
     /* TODO:  Placeholder until you write the correct version! */
     /*NextTurn = CurrentTurn;
