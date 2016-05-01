@@ -1,0 +1,6 @@
+There are 2 LD and 1 ST instruction per iteration. For an array of 100, there will be 100 iterations. 
+Without the arbiter, the LD and ST instructions will take (2 + 1) * 100 = 300 clock cycles.
+With the arbiter, we need to introduce an extra factor of >=2, resulting in >=600 clock cycles.
+This means that the arbiter adds >=300 clock cycles to the computation time for an array length of 100.
+
+If both CPU's are executing the same program, the worst case is that _____

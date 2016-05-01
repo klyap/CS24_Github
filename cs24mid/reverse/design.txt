@@ -1,0 +1,53 @@
+Part 1: high level pseudo code
+-------------------------------
+Input = LinkedList list
+
+if (list->head == NULL && list->tail == NULL):
+    return list
+
+set prev = NULL
+set head = list->head
+set list->tail = head
+while (head != NULL):
+    set next = head->next
+    set head->next = prev
+    set prev = head
+    set head = next 
+    set list->head = head
+
+return list
+
+
+Part 2: deconstructed pseudo code
+----------------------------------
+Input = LinkedList list
+
+if list->head != NULL:
+    if list->tail != NULL:
+        goto code
+    else:
+        goto done
+else:
+    goto done
+
+code:
+    set head = list.head
+    set list->tail = head
+    set prev = NULL
+
+    t = head != NULL
+    if (head == NULL):
+        goto done
+
+loop:
+    set next = head->next
+    set head->next = prev
+    set prev = head
+    set head = next
+    set list->head = head
+
+    if (head == NULL):
+        goto done
+
+done:
+    return list

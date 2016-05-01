@@ -1,0 +1,2 @@
+You can use BLK right before the LD and ST instructions, then use BUN right after them.
+Since BLK and BUN each take >= 2 clock cycles, together they contribute an extra >= 4 clock cycles per iteration.

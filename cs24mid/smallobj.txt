@@ -1,0 +1,14 @@
+1. If the allocator uses an explicit segreagated free-list to manage the heap, the descibed behavior will still cause memory fragmentation. That's because the free-lists are organized by size and all the allocations are about the same size, which defeats the purpose of the organization.
+
+2. Another issue is that the run time will be slow on implicit free lists, since you have to iterate over all blocks. If the memory is fragmented, you will have more blocks to iterate over, increasing the run time. Also having to keep track of lots of small objects has a high bookkeeping overhead.
+
+3. 
+Benefits
+- blocks of memory are put together in one cluster, which prevents fragmentation
+
+Issues
+- there's a lot of unusable free memory lying around
+
+4. If the allocations have different lifetimes, fragmentation could increase over time.
+
+5. 
