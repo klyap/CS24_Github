@@ -4,11 +4,11 @@
 # %ecx = head
 # %edx = next
 
-.globl reverse	           /* Ignore everything beginning with a "." */
+.globl reverse_list
 .text
 	.align 4
 
-reverse:
+reverse_list:
 	pushl %ebp			/* Push old base pointer */
 	movl %esp,%ebp      /* Current stack is new base.*/
 
