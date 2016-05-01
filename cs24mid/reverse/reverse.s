@@ -15,7 +15,7 @@ reverse_list:
 	pushl %ebp			/* Push old base pointer */
 	movl %esp,%ebp      /* Current stack is new base.*/
 	movl 8(%ebp), %eax	/* Store pointer to the list */
-	movl $0, %ecx		/* Temp storage for 0 so it is the right size */
+	movl $0, %ecx		/* Temp storage for 0 so 0 is the right size */
 	cmpl (%eax), %ecx	/* If list->head == NULL */
 	je done				/* Then go to done */
 	cmpl 4(%eax), %ecx	/* If list->tail == NULL */

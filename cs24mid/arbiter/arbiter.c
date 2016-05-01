@@ -77,11 +77,34 @@ void clock_arbiter(BusArbiter *arb) {
     /*==============================================*/
     /* TODO:  Implement the bus-arbiter logic here. */
     /*==============================================*/
+    // CurrentTurn = 0 means ReqA's turn
+    // CurrentTurn = 1 means ReqB's turn
 
+    if (ReqA == 1 && CurrentTurn == 0){
+        GrantA = 1;
+    } else {
+        GrantA = 0;
+    }
+    if (ReqB == 1 && CurrentTurn == 1){
+        GrantB = 1;
+    } else {
+        GrantB = 0;
+    }
+
+    /*if (ReqB == 0){
+        GrantB = 0;
+    }
+    if (ReqA == 0){
+        GrantA = 0;
+    }*/
+
+    if (GrantB + GrantA == 0){
+        NextTurn = ~CurrentTurn;
+    }
     /* TODO:  Placeholder until you write the correct version! */
-    NextTurn = CurrentTurn;
+    /*NextTurn = CurrentTurn;
     GrantA = 0;
-    GrantB = 0;
+    GrantB = 0;*/
 
 
     /* Set outputs and update the state! */
