@@ -2,7 +2,8 @@
 # This function reverses a linked list in place and returns it.
 # 
 # 8(%ebp) = LinkedList *list
-# %eax = list
+# 4(%ebp) = return address
+# %eax = list 
 # %ebx = prev
 # %ecx = head
 # %edx = next

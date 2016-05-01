@@ -27,9 +27,6 @@ Issues
 - Within each chunk, memory isn't coalesced, which may lead to some 
  fragmentation. However, since the small blocks are about the same size,
  this shouldn't be a huge issue.
-- A next fit strategy is used within each chunk to allocate small blocks,
- which is fine, but not optimal for performance.
-
 
 4. If the allocations have different lifetimes and different sizes, 
 fragmentation would increase over time. For similar sizes but different 
@@ -42,20 +39,34 @@ that block for a longer time than usual, wasting space and forcing the
 allocator to allocate another chunk, where this problem could arise 
 again, perpetuating the waste of memory.
 
-5. One strategy to improve the "small object allocator" is to organize blocks by lifetimes. We can add an integer property to the chunk data 
-structure called "age". Initialize c->age to 0. For each attempt to 
-allocate memory to c, increment "age" by 1. After a set period, p, if 
-chunk still hasn't been reset (ie. age is high) and has a lot of free 
-space (ie. num_freed is high), then it means that there are some long-
-lviing blocks in the chunk. The free memory should be released and the 
-blocks in that chunk should be reallocated to a designated "long-living 
-blocks" chunk. 
+5. One strategy to improve the "small object allocator" is to organize 
+blocks by lifetimes. This approach requires us to use explicit 
+free lists to keep track of which chunks are the "long-living blocks".
+This is feasible since only a small percentage of blocks will belong in
+those chunks. 
+We need to add an integer property to the chunk data structure called
+"age". Initialize c->age to 0. 
+For each attempt to allocate memory to c, increment "age" by 1. 
+After a set period, p, if chunk still hasn't been reset (ie. age is high)
+and has a lot of free space (ie. num_freed is high), 
+then it means that there are some long-lviing blocks hogging the chunk.
+We can choose integer constant thresholds, a and nf, to compare 
+age and num_freed to, respectively, to define what it means to be "high".
+If both age and num_freed exceeeds these thresholds,
+then the free memory should be released and the blocks in that chunk 
+should be reallocated to a designated "long-living blocks" chunk.
+If the current "long-living blocks" chunk is full, then we will allocate
+more memory for another "long-living blocks" chunk, just as if it was
+a regular chunk.
 
 This way, we mitigate the problem of wasting chunks that are only 
 occupied by very few, long living blocks and increase memory usage.
+As well, we organize small blocks so that within each chunk we have
+blocks of similar sizes and similar lifetimes, which is the optimal case.
 
-
-
+We can't implement coalescing within each chunk since we are only
+really freeing memory once all the blocks are freed and the "freed"
+blocks can't be used till then anyways.
 
 
 

@@ -1,2 +1,10 @@
-You can use BLK right before the LD and ST instructions, then use BUN right after them.
-Since BLK and BUN each take >= 2 clock cycles, together they contribute an extra >= 4 clock cycles per iteration.
+Assume that BLK and BUN are instructions that we need in addition to using LD/ST.
+You can use BLK right before the first LD instruction, then use BUN right after the ST. Since BLK and BUN each take >= 2 clock cycles, together they contribute an extra >= 4 clock cycles per iteration. This is worse than having the LD/ST instructions be >= 2 clock cycles each. 
+For a single CPU, this adds >= 4 clock cycles / iteration. 
+For 2 CPUs, since both CPUs get a better distribution of accesses, this also adds >= 4 clock cycles / iteration.
+
+Under these assumptions, to make this faster, BLK and BUN need to implemented outside of the loop. BLK should be put right before the first time the program enters the loop. BUN should be put right before DONE. 
+
+However, if we assume that BLK and BUN together take >= 2 clock cycles (ie. ~1 clock cycle each), then they will contribute only an extra >= 2 clock cycles per iteration, which is better.
+For a single CPU executing the program, this adds >= 2 clock cycles / iteration. 
+For 2 CPUs, since both CPUs get a better distribution of accesses, this also just adds >= 2 clock cycles / iteration.
