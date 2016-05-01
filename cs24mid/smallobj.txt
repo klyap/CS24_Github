@@ -1,14 +1,61 @@
-1. If the allocator uses an explicit segreagated free-list to manage the heap, the descibed behavior will still cause memory fragmentation. That's because the free-lists are organized by size and all the allocations are about the same size, which defeats the purpose of the organization.
+1. Memory fragmentation isn't a big issue if the blocks are of roughly 
+the same size because the freed blocks will likely fit the next block to
+be allocated very well.
 
-2. Another issue is that the run time will be slow on implicit free lists, since you have to iterate over all blocks. If the memory is fragmented, you will have more blocks to iterate over, increasing the run time. Also having to keep track of lots of small objects has a high bookkeeping overhead.
+2. 
+a) Performance will especially be slow on implicit free lists, since you
+ have to iterate over all blocks and having small block sizes means 
+ having lots of blocks. The more blocks you have to iterate over, the 
+ longer it will take.
+
+b) Memory will also be an issue. Having to keep track of lots of small 
+objects has a high memory bookkeeping overhead. For example, if the 
+allocator uses an explicit segreagated free-list to manage the heap, the
+descibed behavior will defeat the purpose of computation time and memory
+to keep track of the free lists of different sizes. Also, each block has 
+metadata associated with it, so the more blocks you have, the more space 
+you take up with metadata.
 
 3. 
 Benefits
-- blocks of memory are put together in one cluster, which prevents fragmentation
+- The bookkeeping overhead is reduced since we are only keeping track of
+ fewer large chunks (which track the smaller blocks for us). 
 
 Issues
-- there's a lot of unusable free memory lying around
+- There's a lot of unused free memory lying around since memory isn't 
+ reused until all objects in the chunk are freed.
+- Within each chunk, memory isn't coalesced, which may lead to some 
+ fragmentation. However, since the small blocks are about the same size,
+ this shouldn't be a huge issue.
+- A next fit strategy is used within each chunk to allocate small blocks,
+ which is fine, but not optimal for performance.
 
-4. If the allocations have different lifetimes, fragmentation could increase over time.
 
-5. 
+4. If the allocations have different lifetimes and different sizes, 
+fragmentation would increase over time. For similar sizes but different 
+lifetimes, fragmentation is not a big issue, and degree of fragmentation
+will stay relatively constant over time on the general-purpose heap 
+allocator. On the "small object allocator," memory fragmentation is 
+exacerbated since it's possible there is a single long-living small block 
+occupying a chunk. This will hold off the rest of the available memory in 
+that block for a longer time than usual, wasting space and forcing the 
+allocator to allocate another chunk, where this problem could arise 
+again, perpetuating the waste of memory.
+
+5. One strategy to improve the "small object allocator" is to organize blocks by lifetimes. We can add an integer property to the chunk data 
+structure called "age". Initialize c->age to 0. For each attempt to 
+allocate memory to c, increment "age" by 1. After a set period, p, if 
+chunk still hasn't been reset (ie. age is high) and has a lot of free 
+space (ie. num_freed is high), then it means that there are some long-
+lviing blocks in the chunk. The free memory should be released and the 
+blocks in that chunk should be reallocated to a designated "long-living 
+blocks" chunk. 
+
+This way, we mitigate the problem of wasting chunks that are only 
+occupied by very few, long living blocks and increase memory usage.
+
+
+
+
+
+

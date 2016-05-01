@@ -1,3 +1,6 @@
+# reverse_list(LinkedList *list)
+# This function reverses a linked list in place and returns it.
+# 
 # 8(%ebp) = LinkedList *list
 # %eax = list
 # %ebx = prev
@@ -11,16 +14,16 @@
 reverse_list:
 	pushl %ebp			/* Push old base pointer */
 	movl %esp,%ebp      /* Current stack is new base.*/
-	movl 8(%ebp), %eax	/* Storage for the pointer to the list */
-	cmpl (%eax), NULL	/* If list->head == NULL */
+	movl 8(%ebp), %eax	/* Store pointer to the list */
+	cmpl (%eax), $0		/* If list->head == NULL */
 	je done				/* Then go to done */
-	cmpl 4(%eax), NULL	/* If list->tail == NULL */
+	cmpl 4(%eax), $0	/* If list->tail == NULL */
 	je done				/* Then go to done */
 
 code:
 	movl (%eax), %ecx	/* Set head = list->head */
 	movl %ecx, 4(%eax)	/* Set list->tail = head */
-	movl NULL, %ebx		/* Set prev = NULL */
+	movl $0, %ebx		/* Set prev = NULL */
 
 	cmpl %ecx, NULL		/* If head == NULL */
 	je done				/* Then go to done */
@@ -32,7 +35,7 @@ loop:
 	movl %edx, %ecx		/* Set head = next */
 	movl %ecx, (%eax)	/* Set list->head = head */
 
-	cmpl %ecx, NULL		/* If head == NULL */
+	cmpl %ecx, $0		/* If head == NULL */
 	je done				/* Then go to done */
 
 done:
