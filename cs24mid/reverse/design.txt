@@ -22,12 +22,9 @@ Part 2: deconstructed pseudo code
 ----------------------------------
 Input = LinkedList list
 
-if list->head != NULL:
-    if list->tail != NULL:
-        goto code
-    else:
-        goto done
-else:
+if list->head == NULL:
+	goto done
+if list->tail == NULL:
     goto done
 
 code:
