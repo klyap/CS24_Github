@@ -67,49 +67,40 @@ void clock_arbiter(BusArbiter *arb) {
 
     ReqA = pin_read(arb->req_a);
     ReqB = pin_read(arb->req_b);
+    // CurrentTurn = 0 means ReqA's turn
+    // CurrentTurn = 1 means ReqB's turn
     CurrentTurn = arb->turn;
 
     assert(ReqA == 0 || ReqA == 1);
     assert(ReqB == 0 || ReqB == 1);
     assert(CurrentTurn == 0 || CurrentTurn == 1);
 
-
-    /*==============================================*/
-    /* TODO:  Implement the bus-arbiter logic here. */
-    /*==============================================*/
-    // CurrentTurn = 0 means ReqA's turn
-    // CurrentTurn = 1 means ReqB's turn
-
+    // If it's ReqA's turn, assign give it the bus
+    // ensuring at most 1 grant signal is 1
     if (ReqA == 1 && CurrentTurn == 0){
         GrantA = 1;
+        GrantB = 0;
     } else {
         GrantA = 0;
     }
+
+    // If it's ReqB's turn, assign give it the bus,
+    // ensuring at most 1 grant signal is 1
     if (ReqB == 1 && CurrentTurn == 1){
         GrantB = 1;
+        GrantA = 0;
     } else {
         GrantB = 0;
     }
 
-    /*if (ReqB == 0){
-        GrantB = 0;
-    }
-    if (ReqA == 0){
-        GrantA = 0;
-    }*/
-
+    // Only toggle the turn when no bus is being used
     if (GrantB + GrantA == 0){
         if (CurrentTurn == 1){
             NextTurn = 0;
         } else {
             NextTurn = 1;
         }
-        
     }
-    /* TODO:  Placeholder until you write the correct version! */
-    /*NextTurn = CurrentTurn;
-    GrantA = 0;
-    GrantB = 0;*/
 
 
     /* Set outputs and update the state! */
