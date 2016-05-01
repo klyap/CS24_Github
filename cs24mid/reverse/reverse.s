@@ -15,9 +15,10 @@ reverse_list:
 	pushl %ebp			/* Push old base pointer */
 	movl %esp,%ebp      /* Current stack is new base.*/
 	movl 8(%ebp), %eax	/* Store pointer to the list */
-	cmpl (%eax), $0		/* If list->head == NULL */
+	movl $0, %ecx		/* Temp storage for 0 so it is the right size */
+	cmpl (%eax), %ecx	/* If list->head == NULL */
 	je done				/* Then go to done */
-	cmpl 4(%eax), $0	/* If list->tail == NULL */
+	cmpl 4(%eax), %ecx	/* If list->tail == NULL */
 	je done				/* Then go to done */
 
 code:
@@ -25,7 +26,7 @@ code:
 	movl %ecx, 4(%eax)	/* Set list->tail = head */
 	movl $0, %ebx		/* Set prev = NULL */
 
-	cmpl %ecx, NULL		/* If head == NULL */
+	cmpl %ecx, %ebx		/* If head == NULL */
 	je done				/* Then go to done */
 
 loop:
@@ -35,8 +36,8 @@ loop:
 	movl %edx, %ecx		/* Set head = next */
 	movl %ecx, (%eax)	/* Set list->head = head */
 
-	cmpl %ecx, $0		/* If head == NULL */
-	je done				/* Then go to done */
+	cmpl %ecx, %ecx		/* If head == NULL */
+	jz done				/* Then go to done */
 
 done:
 	popl %ebp           /* Pop old base of frame. */
