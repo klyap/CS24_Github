@@ -99,7 +99,12 @@ void clock_arbiter(BusArbiter *arb) {
     }*/
 
     if (GrantB + GrantA == 0){
-        NextTurn = ~CurrentTurn;
+        if (CurrentTurn == 1){
+            NextTurn = 0;
+        } else {
+            NextTurn = 1;
+        }
+        
     }
     /* TODO:  Placeholder until you write the correct version! */
     /*NextTurn = CurrentTurn;
