@@ -1,0 +1,15 @@
+Part a
+---------
+100 + 1 clock cycles / instruction = 101 cycles/instruction
+3 GHz = 3 billion cycles/sec
+
+Expect: 3 billion/101 = ___ instructions
+Miss rate: (___ - 750 million)/ ___ = 
+
+Part b
+---------
+Current instructions/sec = 750 M/sec
+Doubling = 1500 M/sec
+1500 M = ___ - x
+x = ??
+
