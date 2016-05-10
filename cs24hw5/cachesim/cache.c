@@ -315,7 +315,10 @@ void decompose_address(cache_t *p_cache, addr_t address,
  */
 addr_t get_block_start_from_address(cache_t *p_cache, addr_t address) {
     /* TODO:  IMPLEMENT */
-    return (addr_t) (address + sizeof(tag) + sizeof(set));
+    //int s = p_cache->sets_addr_bits;
+    //int b = p_cache->block_size;
+    int b = ~(p_cache->block_offset_bits);
+    return address & b;
 }
 
 
@@ -337,11 +340,11 @@ addr_t get_offset_in_block(cache_t *p_cache, addr_t address) {
 addr_t get_block_start_from_line_info(cache_t *p_cache,
                                       addr_t tag, addr_t set_no) {
     /* TODO:  IMPLEMENT */
-    //p_cache->sets_addr_bits = log_2(num_sets);
-    //p_cache->block_offset_bits = log_2(block_size);
+    int s = p_cache->sets_addr_bits;
+    int b = p_cache->block_offset_bits;
 
-    // How to get addr_t from cache?
-    return 0;
+    
+    return (tag << s) | set_no;
 }
 
 
@@ -389,8 +392,8 @@ cacheline_t * choose_victim(cacheset_t *p_set) {
     victim = p_set->cache_lines + i_victim;
 #else
     /* TODO:  Implement the LRU eviction policy. */
-    
-    
+
+
     abort();
 #endif
     
